@@ -1,0 +1,51 @@
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" dir="rtl">
+    <div class="container">
+      <a class="navbar-brand bg-danger text-light border border-warning font-italic font-weight-bolder rounded-pill" href="#">ZOOMIT</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">خانه
+              <span class="sr-only">(current)</span>
+            </a>
+          </li>
+          <li class="nav-item ">
+            <a class="nav-link" href="#">درباره ما</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">سرویس ها</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">دسته بندی</a>
+          </li>
+           <li class="nav-item">
+                {% if request.user.is_authenticated %}
+                  <a class="nav-link border border-1 border-info btn btn-info btn-outline-warning text-white" href="{% url 'logout' %}">خروج</a>
+                {% else %}
+                  <a class="nav-link border border-1 border-info btn btn-info btn-outline-success text-white" href="{% url 'login' %}">Login</a>
+                {% endif %}
+           </li>
+        </ul>
+
+
+      <form class="form-inline my-2 my-lg-0 d-sm-none d-md-block">
+          <input class="form-control " type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-info my-2 " type="submit">Search</button>
+      </form>
+      </div>
+    </div>
+  </nav>
+
+
+
+
+
+
+
+
+
+
+
+
