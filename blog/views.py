@@ -10,7 +10,7 @@ from django.contrib.auth import login, logout, authenticate
 def home(request):
     author = request.GET.get('author', None)
     category = request.GET.get('category', None)
-    posts = Post.objects.all()
+    posts = Post.objects.all()[:9]
     posts_promot = Post.objects.filter(promote=True)[:3]
 
     if author:
@@ -49,11 +49,19 @@ def category_single(request, pk):
     except Category.DoesNotExist:
         raise Http404('Category not found')
     posts = Post.objects.filter(category=category)
-    links = ''.join(
-        '<li><a href={}>{}</a></li>'.format(reverse('post_single', args=[post.slug]), post.title) for post in posts)
-    blog = '<html><head><title>post archive</title></head>{}<a href={}>all categories</a></body></html>'.format(
-        '<ul>{}</ul>'.format(links), reverse('categories_archive'))
-    return HttpResponse(blog)
+
+    context = {
+        'posts': posts,
+        'category' : category,
+    }
+    # links = ''.join(
+    #     '<li><a href={}>{}</a></li>'.format(reverse('post_single', args=[post.slug]), post.title) for post in posts)
+    # blog = '<html><head><title>post archive</title></head>{}<a href={}>all categories</a></body></html>'.format(
+    #     '<ul>{}</ul>'.format(links), reverse('categories_archive'))
+    # # return HttpResponse(blog)
+    return render(request, 'blog/post_archive.html', context)
+
+
 
 
 def categories_archive(request):
