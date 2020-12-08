@@ -1,0 +1,15 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block body %}
+
+    <div class="container col-lg-10 col-md-6 col-sm-8 bg-info" style="width: 500px;height: 500px;padding-top: 60px;">
+        <hgroup class="bg-warning border rounded">: دسته بندی ها</hgroup>
+        <div class="list-group">
+            {% for cat in categories %}
+                <a href="{% url 'category_single' cat.slug %}" class="list-group-item">{{ cat.title }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
+
+{% endblock %}

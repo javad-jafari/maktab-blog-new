@@ -52,26 +52,18 @@ def category_single(request, pk):
 
     context = {
         'posts': posts,
-        'category' : category,
+        'category': category,
     }
-    # links = ''.join(
-    #     '<li><a href={}>{}</a></li>'.format(reverse('post_single', args=[post.slug]), post.title) for post in posts)
-    # blog = '<html><head><title>post archive</title></head>{}<a href={}>all categories</a></body></html>'.format(
-    #     '<ul>{}</ul>'.format(links), reverse('categories_archive'))
-    # # return HttpResponse(blog)
+
     return render(request, 'blog/post_archive.html', context)
-
-
 
 
 def categories_archive(request):
     categories = Category.objects.all()
-    links = ''.join(
-        '<li><a href={}>{}</a></li>'.format(reverse('category_single', args=[category.slug]), category.title) for
-        category in categories)
-    blog = '<html><head><title>post archive</title></head>{}</body></html>'.format(
-        '<ul>{}</ul>'.format(links))
-    return HttpResponse(blog)
+    context = {
+        'categories': categories,
+    }
+    return render(request, 'blog/categories.html', context)
 
 
 def login_view(request):
