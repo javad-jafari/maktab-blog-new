@@ -1,10 +1,11 @@
 from django import forms
-from blog.forms import UserRegistrationForm
+from blog.forms import UserRegistrationForm,UserLoginForm,UserSeconRegistrationForm
 from django.http import HttpResponse, Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from .models import Post, Category
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.models import User
 
 
 def home(request):
@@ -70,16 +71,24 @@ def login_view(request):
     if request.user.is_authenticated:
         return redirect('posts_archive')
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        print(username, password)
-        user = authenticate(request, username=username, password=password)
-        if user and user.is_active:
-            login(request, user)
-            return redirect('posts_archive')
+        form = UserLoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request.POST, username=username, password=password)
+            if user and user.is_active:
+                login(request, user)
+                return redirect('posts_archive')
+            else:
+                print('unvalid')
+                context = {'form': form}
     else:
-        pass
-    return render(request, 'blog/login.html', context={})
+
+        form = UserLoginForm()
+    return render(request, 'blog/login.html', {'form': form})
+
+
+
 
 
 def logout_view(request):
@@ -89,14 +98,16 @@ def logout_view(request):
 
 def register_view(request):
     if request.method == 'POST':
-        form = UserRegistrationForm(request.POST)
+        form = UserSeconRegistrationForm(request.POST)
         if form.is_valid():
-            print('valid')
+            form.save()
+            context={'form': form}
+            return redirect('login')
         else:
             print('unvalid')
         context = {'form': form}
     else:
-        form = UserRegistrationForm()
+        form = UserSeconRegistrationForm()
         context = {'form': form}
 
     return render(request, 'blog/register.html', context)

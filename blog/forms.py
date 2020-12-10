@@ -1,8 +1,9 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django.forms import fields
 from django.utils.translation import ugettext_lazy as _
 from blog.models import Comment
-
+from django.contrib.auth.models import User
 from blog.validators import validate_password, validate_username
 
 
@@ -33,3 +34,36 @@ class UserRegistrationForm(forms.Form):
         password = self.cleaned_data.get('password', None)
         validate_password(password)
         return password
+
+
+
+class UserLoginForm(forms.Form):
+    username = forms.CharField(label=_('نام کاربری'), max_length=150, required=True,
+                               widget=forms.TextInput(attrs={"class": "form-control", }))
+
+    password = forms.CharField(label=_('کلمه عبور'), widget=forms.PasswordInput(attrs={"class": "form-control"}),
+                               required=True)
+
+    
+    def clean_username(self):
+        username = self.cleaned_data.get('username', None)
+        return username
+
+    def clean_password(self):
+        password = self.cleaned_data.get('password', None)
+        return password
+
+
+class UserSeconRegistrationForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        labels = {
+            'username': _('نام کاربری'),
+            "password": _('رمز عبور'),
+            "email":_('ایمیل'),
+            "first_name":_('نام'),
+            "last_name":_('نام خانوادگی'),
+        }
+        fields = ["username", "password", "email","first_name","last_name" ]
+       

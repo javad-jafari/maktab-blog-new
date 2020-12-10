@@ -24,7 +24,11 @@
                 {% if request.user.is_authenticated %}
                   <a class="nav-link border border-1 border-info btn btn-info btn-outline-warning text-white" href="{% url 'logout' %}">خروج</a>
                 {% else %}
-                  <a class="nav-link border border-1 border-info btn btn-info btn-outline-success text-white" href="{% url 'login' %}">Login</a>
+                <div class="btn-group " role="group" aria-label="Basic example">
+                  <button type="button" class="btn btn-info rounded rounded-pill"><a class="nav-link  text-dark" href="{% url 'login' %}">Login</a></button>
+                  <button type="button" class="btn btn-success rounded rounded-pill"><a class="nav-link  text-dark" href="{% url 'register' %}">Register</a></button>
+                </div>
+                  
                 {% endif %}
            </li>
         </ul>

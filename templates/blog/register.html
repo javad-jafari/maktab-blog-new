@@ -1,16 +1,18 @@
 {% extends 'base/base.html' %}
+{% load static %}
+
 {% block title %}
     Register
 {% endblock %}
 
 {% block body %}
-<div class="container">
+<div class="container d-flex " id="regis-back" dir="rtl">
     <div class="row">
         <div class="col-12">
-            <form action="{% url 'register' %}" method="post">
+            <form action="{% url 'register' %}" method="post" class="form-group ">
                 {% csrf_token %}
-                {{ form.as_ul}}
-                <input type="submit" value="register">
+                {{ form.as_ul }}
+                <input type="submit" value="ثبت نام" class="btn btn-info">
             </form>
         </div>
     </div>
