@@ -1,5 +1,5 @@
 from django import forms
-from blog.forms import UserRegistrationForm,UserLoginForm,UserSeconRegistrationForm
+from blog.forms import UserRegistrationForm, UserLoginForm, UserSeconRegistrationForm, CommentForm
 from django.http import HttpResponse, Http404
 from django.shortcuts import redirect, render
 from django.urls import reverse
@@ -34,13 +34,24 @@ def single(request, pk):
     except Post.DoesNotExist:
         raise Http404('post not found')
     context = {
+        'form': CommentForm(),
         "post": post,
         'settings': post.post_setting,
         'category': post.category,
         'author': post.author,
         'categories': categories,
-        'comments': post.comments.filter(is_confirmed=True),
+        'comments': post.comments.filter(is_confirmed=True)
     }
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.post = post
+            comment.save()
+        else:
+            context['form'] = form
+
     return render(request, 'blog/post_single.html', context)
 
 
@@ -88,9 +99,6 @@ def login_view(request):
     return render(request, 'blog/login.html', {'form': form})
 
 
-
-
-
 def logout_view(request):
     logout(request)
     return redirect('posts_archive')
@@ -101,7 +109,7 @@ def register_view(request):
         form = UserSeconRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            context={'form': form}
+            context = {'form': form}
             return redirect('login')
         else:
             print('unvalid')

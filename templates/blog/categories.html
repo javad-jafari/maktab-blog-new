@@ -1,8 +1,11 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% block title %}
+    Categories
+{% endblock %}
 {% block body %}
 
-    <div class="container col-lg-10 col-md-6 col-sm-8 bg-info" style="width: 500px;height: 500px;padding-top: 60px;">
+    <div class="container col-lg-10 col-md-6 col-sm-8 bg-info" id="categories-back">
         <hgroup class="bg-warning border rounded">: دسته بندی ها</hgroup>
         <div class="list-group">
             {% for cat in categories %}
