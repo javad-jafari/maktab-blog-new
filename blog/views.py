@@ -119,3 +119,8 @@ def register_view(request):
         context = {'form': form}
 
     return render(request, 'blog/register.html', context)
+
+
+def about_view(request):
+
+    return render(request, 'blog/about_us.html')

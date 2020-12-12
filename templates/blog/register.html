@@ -6,10 +6,15 @@
 {% endblock %}
 
 {% block body %}
-<div class="container d-flex " id="regis-back" dir="rtl">
+<div class="container text-center rounded" id="reg2-back">
+    <h1 class="">فرم ثبت نام</h1>
+</div>
+
+<div class="container d-flex justify-content-center align-items-center rounded " id="regis-back" dir="rtl">
+    
     <div class="row">
         <div class="col-12">
-            <form action="{% url 'register' %}" method="post" class="form-group ">
+            <form action="{% url 'register' %}" method="post" class="form-group form-control-plaintext ">
                 {% csrf_token %}
                 {{ form.as_ul }}
                 <input type="submit" value="ثبت نام" class="btn btn-info">

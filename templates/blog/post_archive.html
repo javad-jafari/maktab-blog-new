@@ -1,9 +1,13 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% block title %}
+    Zoomit/post_archive
+{% endblock %}
+
 {% block body %}
 
     {% if posts %}
-        <div class="container " style="padding-top: 60px;">
+        <div class="container " id="parchive-back">
             <div class="row text-center">
                 {% for post in posts %}
 
