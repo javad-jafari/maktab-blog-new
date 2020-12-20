@@ -72,3 +72,21 @@ class CommentForm(forms.ModelForm):
         labels = {'content': _("Comment"), }
         help_texts = {'content': _('enter your comment'), }
         widgets = {'content': forms.Textarea(attrs={'cols': 100, 'rows': 10})}
+
+
+class UserThirdRegistrationForm(forms.ModelForm):
+    password = forms.CharField(label='رمزعبور',widget=forms.PasswordInput)
+    password2 = forms.CharField(label='تکرار رمزعبور',widget=forms.PasswordInput)
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'email')
+        labels = {
+            'username': _('نام کاربری'),
+            "email": _('ایمیل'),
+            "first_name": _('نام'),
+        }
+    def clean_password2(self):
+        cd = self.cleaned_data
+        if cd['password'] != cd['password2']:
+            raise forms.ValidationError('Passwords don\'t match.')
+        return cd['password2']

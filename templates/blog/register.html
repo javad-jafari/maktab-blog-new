@@ -14,9 +14,10 @@
     
     <div class="row">
         <div class="col-12">
-            <form action="{% url 'register' %}" method="post" class="form-group form-control-plaintext ">
+            <form action="{% url 'register' %}" method="post" class="form-group">
                 {% csrf_token %}
-                {{ form.as_ul }}
+                {{ user_form.as_p }}
+                <!-- {{ form.as_ul }} -->
                 <input type="submit" value="ثبت نام" class="btn btn-info">
             </form>
         </div>
