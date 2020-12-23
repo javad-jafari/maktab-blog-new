@@ -71,7 +71,7 @@ class CommentForm(forms.ModelForm):
         fields = ('content',)
         labels = {'content': _("Comment"), }
         help_texts = {'content': _('enter your comment'), }
-        widgets = {'content': forms.Textarea(attrs={'cols': 100, 'rows': 10})}
+        widgets = {'content': forms.Textarea(attrs={'cols': 100, 'rows': 5})}
 
 
 class UserThirdRegistrationForm(forms.ModelForm):

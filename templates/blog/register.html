@@ -9,19 +9,16 @@
 <div class="container text-center rounded" id="reg2-back">
     <h1 class="">فرم ثبت نام</h1>
 </div>
-
-<div class="container d-flex justify-content-center align-items-center rounded " id="regis-back" dir="rtl">
-    
-    <div class="row">
-        <div class="col-12">
-            <form action="{% url 'register' %}" method="post" class="form-group">
-                {% csrf_token %}
-                {{ user_form.as_p }}
-                <!-- {{ form.as_ul }} -->
-                <input type="submit" value="ثبت نام" class="btn btn-info">
-            </form>
+    <div class="container rounded" dir="rtl" id="regis-back">
+        <div class="row">
+            <div class="col-12">
+                <form method="post" action="{% url 'register' %}">
+                    {% csrf_token %}
+                    {% include 'component/form.html' %}
+                    <input type="submit" class="btn btn-outline-primary" value="ثبت نام">
+                </form>
+            </div>
         </div>
     </div>
-</div>
 
 {% endblock %}
