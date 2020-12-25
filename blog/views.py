@@ -1,41 +1,66 @@
 from django import forms
+from blog.models import Comment
 from django.core import paginator
-from blog.forms import UserRegistrationForm, UserLoginForm, UserSeconRegistrationForm, CommentForm,UserThirdRegistrationForm
-from django.http import HttpResponse, Http404
-from django.shortcuts import redirect, render
+from blog.forms import UserRegistrationForm, UserLoginForm, UserSeconRegistrationForm, CommentForm, \
+    UserThirdRegistrationForm
+from django.http import HttpResponse, Http404, HttpResponseRedirect, response
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from .models import Post, Category
+from .models import CommentLike, Post, Category
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
-from django.core.paginator import Paginator,EmptyPage
+from django.core.paginator import Paginator, EmptyPage
+from django.views.generic import TemplateView, DetailView, View, RedirectView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 
-def home(request):
-    author = request.GET.get('author', None)
-    category = request.GET.get('category', None)
-    posts = Post.objects.all()[:9]
-    posts_promot = Post.objects.filter(promote=True)[:3]
-     # posts = Post.objects.all()
-    # p = paginator(posts,9)
-    # page_num = request.GET.get('page',1)
+class HomeView(TemplateView):
+    template_name = 'blog/posts.html'
 
-    # try:
-    #     page = p.page(page_num)
-    # except EmptyPage:
-    #     page = p.page(1)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['posts'] = Post.objects.filter(draft=False)[:9]
+        context['category'] = Category.objects.all()
+        context['posts_promot'] = Post.objects.filter(promote=True)[:3]
+        return context
 
-    if author:
-        posts = posts.filter(author__username=author)
-    if category:
-        posts = posts.filter(category__slug=category)
-    categories = Category.objects.all()
-    context = {
-        "posts": posts,
-        "categories": categories,
-        'posts_promot': posts_promot,
-        # 'items' : page,
-    }
-    return render(request, 'blog/posts.html', context)
+
+@csrf_exempt
+def like_comment(request):
+    data = json.loads(request.body)
+    user = request.user
+    try:
+        comment = Comment.objects.get(id=data['comment_id'])
+    except Comment.DoesNotExist:
+        return HttpResponse('bad request', status=404)
+    try:
+        comment_like = CommentLike.objects.get(author=user, comment=comment)
+        comment_like.condition = data['condition']
+        comment_like.save()
+    except CommentLike.DoesNotExist:
+        CommentLike.objects.create(author=user, condition=data['condition'], comment=comment)
+    response = {'like_count': comment.like_count, 'dislike_count': comment.dislike_count}
+
+    return HttpResponse(json.dumps(response), status=201)
+
+
+# class SinglePost(DetailView):
+#     model = Post
+#     template_name = 'blog/post_single_class.html'
+
+#     def get_object(self):
+#         slug = self.kwargs.get('slug')
+#         return get_object_or_404(Post.objects.select_related('post_setting', 'category', 'author'),slug=slug)
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs) 
+#         post = context['post']
+#         context['comments'] = post.comments.all()
+#         context['settings'] = post.post_setting
+#         context['form'] = CommentForm()
+#         return context
 
 
 def single(request, pk):
@@ -110,37 +135,17 @@ def login_view(request):
     return render(request, 'blog/login.html', {'form': form})
 
 
-def logout_view(request):
-    logout(request)
-    return redirect('posts_archive')
+class LogoutView(RedirectView):
+ 
+    url = '/posts/'
 
-
-# def register_view(request):
-#     if request.method == 'POST':
-#         form = UserSeconRegistrationForm(request.POST)
-#         if form.is_valid():        
-#             user = form.save(commit=False)
-#             password = user.password
-#             user.set_password(password)
-#             user.save()
-#             return redirect('login')
-
-#         else:
-#             print('unvalid')
-#         context = {'form': form}
-#     else:
-#         form = UserSeconRegistrationForm()
-#         context = {'form': form}
-
-#     return render(request, 'blog/register.html', context)
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return super(LogoutView, self).get(request, *args, **kwargs)
 
 
 def about_view(request):
-
     return render(request, 'blog/about_us.html')
-
-
-
 
 
 def register_view(request):
@@ -153,11 +158,8 @@ def register_view(request):
             new_user.set_password(user_form.cleaned_data['password'])
             # Save the User object
             new_user.save()
-            return render(request,'blog/posts.html',{'new_user': new_user})
+            return render(request, 'blog/posts.html', {'new_user': new_user})
 
     else:
         user_form = UserThirdRegistrationForm()
-    return render(request,'blog/register.html',{'user_form': user_form})
-
-
-
+    return render(request, 'blog/register.html', {'user_form': user_form})

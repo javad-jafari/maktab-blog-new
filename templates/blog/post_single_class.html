@@ -1,0 +1,197 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %}
+    zoomit/{{ post.title }}
+{% endblock %}
+{% block body %}
+    <!-- Page Content -->
+    <div class="container text-light">
+
+        <div class="row">
+
+            <!-- Post Content Column -->
+            <div class="col-lg-8">
+
+                <!-- Title -->
+                <h1 class="mt-5 text-right">{{ post.title }}</h1>
+
+
+                <!-- Author -->
+
+
+                <hr class="bg-light">
+
+                <!-- Date/Time -->
+                {% if post.post_setting.author %}
+                    <a href="#" class="border border-1 btn btn-outline-info btn-sm ">
+                        <i class="fa fa-lg fa-user-circle" aria-hidden="true"></i> {{ post.author }}</a>
+                {% endif %}
+                <p> {{ post.category }} </p>
+                <p class="text-right"> {{ post.publish_time.date }} <i class="fa fa-calendar-o" aria-hidden="true"></i>
+                </p>
+
+
+                <hr class="bg-light">
+
+                <!-- Preview Image -->
+                <img class="img-fluid rounded" src="{{ post.image.url }}" alt="img-background" id="content-img">
+
+                <hr class="bg-light">
+
+                <!-- Post Content -->
+                <p class="card-text">
+                    {{ post.content }}
+                </p>
+                <hr class="bg-light">
+                {% if settings.allow_discussion %}
+                    {% if settings.comment %}
+                        <!-- Comments Form -->
+                        <form action="{% url 'post_single' slug=post.slug %}" method="post">
+                            {% csrf_token %}
+                            {% include 'component/commentform.html' %}
+                            <input type="submit" value="ok" class="btn btn-outline-info">
+                        </form>
+                    {% endif %}
+                    <!-- Single Comment -->
+                    <div class='container' id="comment-bg">
+                    {% for comment in comments %}
+                        <hr class="bg-danger ">
+                        <div class="media mb-4 bg-secondary rounded" id="bg">
+
+                            <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+                            <div class="media-body">
+                                <h5 class="mt-0 border-bottom">  {{ comment.author }}  </h5>
+                                <p> {{ comment.content }}</p>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p>dislike:{{ comment.dislike_count }}</p>
+                            <p>like:{{ comment.like_count }}</p>
+                        </div>
+                        <div>
+                            <button onclick="likeComment($`{{ comment.id }} `)">like</button>
+                            <button onclick="likeComment($`{{ comment.id }}`,false)">dislike</button>
+                        </div>
+                    {% endfor %}
+                    <div>
+                {% endif %}
+
+
+                </div>
+
+                <!-- Sidebar Widgets Column -->
+                <div class="col-md-4 my-5">
+
+                    <!-- Categories Widget -->
+                    <div class="card my-4">
+                        <h5 class="card-header text-dark">مقالات پربازدید</h5>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <ul class="list-unstyled mb-0">
+                                        <li>
+                                            <a href="#">Web Design</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">HTML</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Freebies</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-lg-6">
+                                    <ul class="list-unstyled mb-0">
+                                        <li>
+                                            <a href="#">Web Design</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">HTML</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Freebies</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Freebies</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="col-lg-6">
+                                    <ul class="list-unstyled mb-0">
+                                        <li>
+                                            <a href="#">JavaScript</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">CSS</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Tutorials</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Side Widget -->
+                    <div class="card my-4 text-dark">
+                        <h5 class="card-header">تبلیغات</h5>
+                        <div class="card-body">
+                            <img style="height: 100px;width:260px;" src="{{ post.image.url }}" alt="">
+                            <p>کجا...!؟</p>
+                            <p>مدرسان شریف</p>
+                            <p>چطور...!؟</p>
+                            <p>مدرسان شریف</p>
+                        </div>
+                    </div>
+
+
+                    <!-- category widget-->
+                    <div class="card my-4">
+                        <h5 class="card-header text-dark">دسته بندی ها</h5>
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="col-lg-6">
+                                    <ul class="list-unstyled mb-0">
+                                        {% for category in categories %}
+                                            <li>
+                                                <a href="{% url 'category_single' category.slug %}">{{ category.title }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.row -->
+
+    </div>
+    <!-- /.container -->
+
+
+{% endblock %}
+
+
+
+{% block javascript %}
+    <script>
+        function likeComment(commentID, condition = true) {
+            const data = JSON.stringify({comment_id: commentID, condition})
+            $.ajax({
+                type: "POST",
+                url: "{% url 'like_comment' %}",
+                data: data,
+                success: function (response) {
+                    console.log(JSON.parse(response))
+                }
+            });
+        }
+    </script>
+{% endblock %}
