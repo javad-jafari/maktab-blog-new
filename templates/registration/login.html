@@ -1,0 +1,33 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+
+{% block body %}
+
+    <div class="container d-flex align-items-center justify-content-center rounded rounded-pill" id="login-form">
+        <div class="col-8 ">
+            <form action="{% url 'login' %}" method="post">
+
+                {% csrf_token %}
+                <label for="{{ form.username.id_for_label }}" class="label">
+                    نام کاربری
+                </label>
+                <p>{{ form.username }}</p>
+                <p class="help is-danger">{{ form.username.errors }}</p>
+
+
+                <label for="{{ form.password.id_for_label }}" class="label">
+                    رمز عبور
+                </label>
+
+                <p>{{ form.password }}</p>
+
+                <p class="help is-danger">{{ form.password.errors }}</p>
+
+                <input type="submit" value="ورود" class="btn btn-outline-info text-dark" id='btn-login'>
+
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

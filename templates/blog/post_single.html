@@ -2,7 +2,7 @@
 
 {% load static %}
 {% block title %}
-    zoomit/{{ post.title }}
+    zoomit/{{ post.slug }}
 {% endblock %}
 {% block body %}
     <!-- Page Content -->
@@ -27,7 +27,12 @@
                     <a href="#" class="border border-1 btn btn-outline-info btn-sm ">
                         <i class="fa fa-lg fa-user-circle" aria-hidden="true"></i> {{ post.author }}</a>
                 {% endif %}
-                <p class="text-right"> {{ post.publish_time.date }} <i class="fa fa-calendar-o" aria-hidden="true"></i>
+                <p class="text-right"><p> {{ post.publish_time.date }} :تاریخ انتشار</p>
+                <p>
+                {{ post.category }} :
+                دسته بندی
+
+                </p>
                 </p>
 
 
@@ -66,13 +71,12 @@
                             </div>
                         </div>
                         <div>
-
                             like:<span  id='like_counter'>{{ comment.like_count }}</span>
                             dislike:<span id='dislike_counter'>{{ comment.dislike_count  }}</span>
                         </div>
                         <div class="mb-5">
-                            <button class="bg-success " onclick="likeComment({{ comment.id }})">like</button>
-                            <button class="bg-danger " onclick="likeComment({{ comment.id }},false)" >dislike</button>
+                            <i class="fa fa-thumbs-o-up text-success" aria-hidden="true"onclick="likeComment({{ comment.id }})"></i>
+                            <i class="fa fa-thumbs-o-down text-danger" aria-hidden="true" onclick="likeComment({{ comment.id }},false)" ></i>
                         </div>
                     {% endfor %}
                     <div>

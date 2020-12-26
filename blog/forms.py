@@ -75,8 +75,9 @@ class CommentForm(forms.ModelForm):
 
 
 class UserThirdRegistrationForm(forms.ModelForm):
-    password = forms.CharField(label='رمزعبور',widget=forms.PasswordInput)
-    password2 = forms.CharField(label='تکرار رمزعبور',widget=forms.PasswordInput)
+    password = forms.CharField(label='رمزعبور', widget=forms.PasswordInput)
+    password2 = forms.CharField(label='تکرار رمزعبور', widget=forms.PasswordInput)
+
     class Meta:
         model = User
         fields = ('username', 'first_name', 'email')
@@ -85,6 +86,7 @@ class UserThirdRegistrationForm(forms.ModelForm):
             "email": _('ایمیل'),
             "first_name": _('نام'),
         }
+
     def clean_password2(self):
         cd = self.cleaned_data
         if cd['password'] != cd['password2']:
