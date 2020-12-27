@@ -1,23 +1,25 @@
 from django import forms
-from django.views.generic.detail import SingleObjectMixin
-
 from blog.models import Comment
-from django.core import paginator
 from blog.forms import (UserRegistrationForm,
                         UserLoginForm,
                         UserSeconRegistrationForm,
                         CommentForm,
                         UserThirdRegistrationForm)
-from django.http import HttpResponse, Http404, HttpResponseRedirect, response
-from django.shortcuts import get_object_or_404, redirect, render
+
+from django.http import (HttpResponse,
+                         Http404,
+                         HttpResponseRedirect,
+                         response)
+
+from django.shortcuts import (get_object_or_404,
+                              redirect,
+                              render)
 from django.urls import reverse
 from .models import CommentLike, Post, Category
 from django.contrib.auth import login, logout, authenticate, REDIRECT_FIELD_NAME
 from django.contrib.auth.models import User
-from django.core.paginator import Paginator, EmptyPage
-from django.views.generic import TemplateView, DetailView, View, RedirectView, FormView, ListView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.decorators.csrf import csrf_exempt, csrf_protect
+from django.views.generic import TemplateView, DetailView, RedirectView, ListView
+from django.views.decorators.csrf import csrf_exempt
 import json
 
 from django.contrib.auth import authenticate, login
@@ -69,7 +71,6 @@ class SinglePost(DetailView):
         post = context['post']
         context['comments'] = post.comments.all()
         context['settings'] = post.post_setting
-        context['form'] = CommentForm()
         return context
 
 
@@ -101,15 +102,12 @@ def single(request, pk):
     return render(request, 'blog/post_single.html', context)
 
 
-
-
 class SingleCategory(ListView):
     model = Post
     template_name = 'blog/post_archive_class.html'
     context_object_name = 'posts'
 
     def get_queryset(self):
-
         slug = self.kwargs.get('pk')
         category = get_object_or_404(Category.objects.filter(), slug=slug)
         posts = Post.objects.filter(category=category)
@@ -163,7 +161,6 @@ class LoginView(View):
             return redirect(reverse('posts_archive'))
 
 
-
 class RegisterView(View):
     def get(self, request):
         return render(request, 'registration/register.html', {'form': UserThirdRegistrationForm})
@@ -181,20 +178,6 @@ class RegisterView(View):
 
 class AboutView(TemplateView):
     template_name = 'blog/about_us.html'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # def about_view(request):
 #     return render(request, 'blog/about_us.html' )

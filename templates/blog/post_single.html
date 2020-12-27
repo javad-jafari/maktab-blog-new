@@ -54,8 +54,11 @@
                         <!-- Comments Form -->
                         <form action="{% url 'post_single' pk=post.slug %}" method="post">
                             {% csrf_token %}
-                            {% include 'component/commentform.html' %}
-                            <input type="submit" value="ok" class="btn btn-outline-info">
+{#                            {% include 'component/commentform.html' %}#}
+                            <textarea dir="rtl" placeholder="نظرخودراواردکنید" rows="4" cols="90" style="resize: none">
+
+                            </textarea>
+                            <input type="submit" value="ok" class="btn btn-outline-info mt-5">
                         </form>
                     {% endif %}
                     <!-- Single Comment -->
