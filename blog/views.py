@@ -61,7 +61,6 @@ def like_comment(request):
 class SinglePost(DetailView):
     model = Post
     template_name = 'blog/post_single.html'
-
     def get_object(self):
         slug = self.kwargs.get('pk')
         return get_object_or_404(Post.objects.select_related('post_setting', 'category', 'author'), slug=slug)
@@ -74,32 +73,7 @@ class SinglePost(DetailView):
         return context
 
 
-def single(request, pk):
-    try:
-        post = Post.objects.select_related('post_setting', 'category', 'author').get(slug=pk)
-        categories = Category.objects.all()
-    except Post.DoesNotExist:
-        raise Http404('post not found')
-    context = {
-        'form': CommentForm(),
-        "post": post,
-        'settings': post.post_setting,
-        'category': post.category,
-        'author': post.author,
-        'categories': categories,
-        'comments': post.comments.filter(is_confirmed=True)
-    }
-    if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            comment = form.save(commit=False)
-            comment.author = request.user
-            comment.post = post
-            comment.save()
-        else:
-            context['form'] = form
 
-    return render(request, 'blog/post_single.html', context)
 
 
 class SingleCategory(ListView):
@@ -130,9 +104,12 @@ class LogoutView(RedirectView):
 
 class LoginView(View):
     def get(self, request):
+        if request.user.is_authenticated:
+            return redirect('posts_archive')
         return render(request, 'registration/login.html', {'form': AuthenticationForm})
 
     def post(self, request):
+
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = authenticate(
@@ -240,3 +217,31 @@ class AboutView(TemplateView):
 #     }
 #
 #     return render(request, 'blog/post_archive.html', context)
+
+
+# def single(request, pk):
+#     try:
+#         post = Post.objects.select_related('post_setting', 'category', 'author').get(slug=pk)
+#         categories = Category.objects.all()
+#     except Post.DoesNotExist:
+#         raise Http404('post not found')
+#     context = {
+#         'form': CommentForm(),
+#         "post": post,
+#         'settings': post.post_setting,
+#         'category': post.category,
+#         'author': post.author,
+#         'categories': categories,
+#         'comments': post.comments.filter(is_confirmed=True)
+#     }
+#     if request.method == "POST":
+#         form = CommentForm(request.POST)
+#         if form.is_valid():
+#             comment = form.save(commit=False)
+#             comment.author = request.user
+#             comment.post = post
+#             comment.save()
+#         else:
+#             context['form'] = form
+#
+#     return render(request, 'blog/post_single.html', context)
