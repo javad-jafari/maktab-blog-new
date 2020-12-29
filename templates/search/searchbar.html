@@ -1,0 +1,38 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %} saerchbar {% endblock %}
+
+{% block body %}
+    <div class="container " id="parchive-back">
+        <div class="row text-center">
+        {% if object_list %}
+            {% for p in object_list %}
+
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100">
+                        <img class="card-img-top" id="img-posts" src="{{ p.image.url }}" alt="">
+                        <div class="card-body">
+                            <h5 class="card-title"><a href="{% url 'post_single' p.slug %}">{{ p.title }}</a>
+                            </h5>
+
+                            <p class="card-text">{{ p.abstract }}</p>
+
+                        </div>
+                        <div class="card-footer">
+                            <a href="{% url 'post_single' p.slug %}" class="btn btn-primary">بیشتر بدانید</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+            {% else %}
+            <div class="container bg-warning" style="width: 500px;height: 500px;">
+            <p> نتونستم پيداش كنم لطف بهتر جست و جو كن</p>
+            </div>
+    {% endif %}
+
+    </div>
+    </div>
+
+
+{% endblock %}

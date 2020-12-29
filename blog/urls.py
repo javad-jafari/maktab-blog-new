@@ -1,5 +1,5 @@
 from django.urls import path, re_path
-from .views import like_comment, SingleCategory, SinglePost
+from .views import like_comment, SingleCategory, SinglePost, search_view,SearchResultsView
 from .views import HomeView, AboutView, CategoresArchiveView, create_comment
 
 urlpatterns = [
@@ -13,6 +13,8 @@ urlpatterns = [
     path('like_comment/', like_comment, name='like_comment'),
     # path('posts/', home, name='posts_archive'),
     path('comments/', create_comment, name='add_comment'),
+    # path('searchbar/', search_view, name='searchbar'),
+    path('searchbar/',SearchResultsView.as_view() , name='searchbar'),
     # path('categories/', categories_archive, name='categories_archive'),
     # path('categories/<slug:pk>/', category_single, name='category_single'),
     # path('login/', login_view, name='login'),

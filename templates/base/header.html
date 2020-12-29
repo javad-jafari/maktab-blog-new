@@ -22,11 +22,11 @@
           </li>
            <li class="nav-item">
                 {% if request.user.is_authenticated %}
-                  <a class="nav-link border border-1 border-info btn btn-info btn-outline-warning text-white" href="{% url 'logout' %}">خروج</a>
+                  <a class="nav-link text-danger" href="{% url 'logout' %}">خروج</a>
                 {% else %}
                 <div class="btn-group " role="group" aria-label="Basic example">
-                  <button type="button" class="btn btn-info rounded rounded-pill"><a class="nav-link  text-dark" href="{% url 'login' %}">Login</a></button>
-                  <button type="button" class="btn btn-success rounded rounded-pill"><a class="nav-link  text-dark" href="{% url 'register' %}">Register</a></button>
+                  <a class="nav-link  text-white" href="{% url 'login' %}">ورود</a>
+                  <a class="nav-link  text-white" href="{% url 'register' %}">عضويت</a>
                 </div>
                   
                 {% endif %}
@@ -34,8 +34,8 @@
         </ul>
 
 
-      <form class="form-inline my-2 my-lg-0 d-sm-none d-md-block">
-          <input class="form-control " type="search" placeholder="Search" aria-label="Search">
+      <form action="{% url 'searchbar' %}" method="get" class="form-inline my-2 my-lg-0 d-sm-none d-md-block">
+          <input class="form-control " name="search" type="search" placeholder="Search" aria-label="Search">
           <button class="btn btn-outline-info my-2 " type="submit">Search</button>
       </form>
       </div>

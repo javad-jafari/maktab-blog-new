@@ -1,3 +1,4 @@
+from django.db.models.query_utils import Q
 from django.http.response import Http404
 
 from blog.models import Comment
@@ -96,6 +97,24 @@ class CategoresArchiveView(ListView):
 
 class AboutView(TemplateView):
     template_name = 'blog/about_us.html'
+
+class SearchResultsView(ListView):
+    model = Post
+    template_name = 'search/searchbar.html'
+
+    def get_queryset(self):
+        query = self.request.GET.get('search')
+        object_list = Post.objects.filter(
+            Q(title__icontains=query) | Q(category__title__icontains=query)
+        )
+        return object_list
+
+def search_view(request):
+    if request.method == 'GET':
+        search = request.GET.get('search')
+        post = Post.objects.filter(Q(title__icontains=search))
+        context = {'post': post}
+        return render(request, 'search/searchbar.html', context)
 
 # def about_view(request):
 #     return render(request, 'blog/about_us.html' )

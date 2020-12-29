@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.conf import settings
-
+from ckeditor.fields import RichTextField
 
 
 class Category(models.Model):
@@ -25,7 +25,7 @@ class Post(models.Model):
     promote = models.BooleanField(_('promote'), default=False)
     abstract = models.CharField(_("Abstract"), max_length=130, default='none')
     slug = models.SlugField(_("Slug"), db_index=True, unique=True)
-    content = models.TextField(_("Content"))
+    content = RichTextField(_("Content"), blank=True, null=True)
     create_at = models.DateTimeField(_("Create at"), auto_now_add=True)
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
     publish_time = models.DateTimeField(_("Publish at"), db_index=True)
