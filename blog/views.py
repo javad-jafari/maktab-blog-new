@@ -1,3 +1,5 @@
+from django.http.response import Http404
+
 from blog.models import Comment
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -7,6 +9,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.views.generic import TemplateView, DetailView, RedirectView, ListView
 from django.views.decorators.csrf import csrf_exempt
+from blog.forms import CommentForm
 import json
 
 User = get_user_model()
@@ -48,12 +51,12 @@ def create_comment(request):
     user = request.user
     try:
         comment = Comment.objects.create(post_id=data['post_id'], content=data['content'], author=user)
-        response = {"comment_id": comment.id, "content": comment.content, 'dislike_count': 0, 'like_count': 0,
-                    'full_name': user.get_full_name()}
-        return HttpResponse(json.dumps(response), status=201)
+        result = {"comment_id": comment.id, "content": comment.content, 'dislike_count': 0, 'like_count': 0,
+                  'full_name': user.get_full_name()}
+        return HttpResponse(json.dumps(result), status=201)
     except:
-        response = {"error": 'error'}
-        return HttpResponse(json.dumps(response), status=400)
+        result = {"error": 'error'}
+        return HttpResponse(json.dumps(result), status=400)
 
 
 class SinglePost(DetailView):
@@ -69,6 +72,7 @@ class SinglePost(DetailView):
         post = context['post']
         context['comments'] = post.comments.all()
         context['settings'] = post.post_setting
+        context['form'] = CommentForm()
         return context
 
 

@@ -53,24 +53,22 @@
                 {% if settings.allow_discussion %}
                     {% if settings.comment %}
                         <!-- Comments Form -->
-                        <form id="comment_form" action="{% url 'post_single' pk=post.slug %}" method="post">
+                        <form id="comment_form" class="col-12" >
                             {% csrf_token %}
+                            {% include 'component/commentform.html' %}
 
-                            <textarea id="id_content" dir="rtl" placeholder="نظرخودراواردکنید" rows="4" cols="90" style="resize: none">
-
-                            </textarea>
                             <input type="submit" value="ok" class="btn btn-outline-info mt-5">
                         </form>
                     {% endif %}
                     <!-- Single Comment -->
-                    <div class='container' id="comment-bg">
+                    <div class='container adds' id="comment-bg">
                     {% for comment in comments %}
                         <hr class="bg-danger ">
                         <div class="media mb-4 bg-secondary rounded" id="bg">
 
                             <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
                             <div class="media-body">
-                                <h5 class="mt-0 border-bottom">  {{ comment.author }}  </h5>
+                                <h5 class="mt-0 border-bottom">  {{ comment.author.full_name }}  </h5>
                                 <p> {{ comment.content }}</p>
                             </div>
                         </div>
@@ -123,6 +121,13 @@
     </script>
 
 
+
+
+
+
+
+
+
     <script>
         document.getElementById("comment_form").addEventListener("submit", function (event) {
             event.preventDefault();
@@ -133,27 +138,30 @@
                 url: "{% url 'add_comment' %}",
                 data: data,
                 success: function (response) {
+                    console.log(response)
                     const data = JSON.parse(response)
-                    $( "#comment_bg" ).prepend( `
+                    console.log(data)
+                    const result = `
                     <hr class="bg-danger ">
                         <div class="media mb-4 bg-secondary rounded" id="bg">
 
                             <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
                             <div class="media-body">
-                                <h5 class="mt-0 border-bottom">  ${ data.author }  </h5>
+                                <h5 class="mt-0 border-bottom">  ${ data.full_name }  </h5>
                                 <p> ${ data.content }</p>
                             </div>
                         </div>
                         <div>
-                            like:<span id='like_counter${ data.id }'>${data.like_count}</span>
-                            dislike:<span id='dislike_counter${data.id}'>${data.dislike_count}</span>
+                            like:<span id='like_counter${ data.comment_id }'>${data.like_count}</span>
+                            dislike:<span id='dislike_counter${data.comment_id}'>${data.dislike_count}</span>
                         </div>
                         <div class="mb-5">
                             <i class="fa fa-thumbs-o-up text-success" aria-hidden="true"
-                               onclick="likeComment(${data.id })"></i>
+                               onclick="likeComment(${data.comment_id })"></i>
                             <i class="fa fa-thumbs-o-down text-danger" aria-hidden="true"
-                               onclick="likeComment(${data.id},false)"></i>
-                        </div>` );
+                               onclick="likeComment(${data.comment_id},false)"></i>
+                        </div>`
+                    $( ".adds" ).prepend( result );
                 }
             });
         }, false);
