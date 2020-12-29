@@ -26,6 +26,13 @@
                 </div>
             </div>
         {% endfor %}
+    <hr style="background-color: red;size: 5px">
+        <div class="list-group">
+            {% for cat in categories %}
+                <a href="{% url 'category_single' cat.slug %}"
+                   class="list-group-item list-group-item-action">{{ cat.title }}</a>
+            {% endfor %}
+        </div>
 
 
     </div>
@@ -37,9 +44,3 @@
 
 
 
-{#        <div class="list-group">#}
-{#            {% for cat in categories %}#}
-{#     c           <a href="{% url 'category_single' cat.slug %}"#}
-{#                   class="list-group-item list-group-item-action">{{ cat.title }}</a>#}
-{#            {% endfor %}#}
-{#        </div>#}

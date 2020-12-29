@@ -1,11 +1,12 @@
 from django import forms
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.forms import fields
 from django.utils.translation import ugettext_lazy as _
-from blog.models import Comment
 from django.contrib.auth.models import User
 from blog.validators import validate_password, validate_username
-import re
+
+User = get_user_model()
 
 
 class UserRegistrationForm(forms.Form):
@@ -53,40 +54,16 @@ class UserLoginForm(forms.Form):
         return password
 
 
-class UserSeconRegistrationForm(forms.ModelForm):
-    class Meta:
-        model = User
-        labels = {
-            'username': _('نام کاربری'),
-            "password": _('رمز عبور'),
-            "email": _('ایمیل'),
-            "first_name": _('نام'),
-            "last_name": _('نام خانوادگی'),
-        }
-        fields = ["username", "password", "email", "first_name", "last_name"]
-
-
-class CommentForm(forms.ModelForm):
-    class Meta:
-        model = Comment
-        fields = ('content',)
-        labels = {'content': _("Comment"), }
-        help_texts = {'content': _('enter your comment'), }
-        widgets = {'content': forms.Textarea(attrs={'cols': 100, 'rows': 5})}
-
-
 class UserThirdRegistrationForm(forms.ModelForm):
     password = forms.CharField(label='رمزعبور', widget=forms.PasswordInput)
     password2 = forms.CharField(label='تکرار رمزعبور', widget=forms.PasswordInput)
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email')
+        fields = ('full_name', 'email')
         labels = {
-            'username': _('نام کاربری'),
             "email": _('ایمیل'),
-            "first_name": _('نام'),
-            "last_name": _('نام خانوادگی')
+            "full_name": _('نام کامل'),
         }
 
     def clean_password2(self):
@@ -94,5 +71,3 @@ class UserThirdRegistrationForm(forms.ModelForm):
         if cd['password'] != cd['password2']:
             raise forms.ValidationError('Passwords don\'t match.')
         return cd['password2']
-
-

@@ -1,31 +1,15 @@
-from django import forms
 from blog.models import Comment
-from blog.forms import (UserRegistrationForm,
-                        UserLoginForm,
-                        UserSeconRegistrationForm,
-                        CommentForm,
-                        UserThirdRegistrationForm)
-
-from django.http import (HttpResponse,
-                         Http404,
-                         HttpResponseRedirect,
-                         response)
-
-from django.shortcuts import (get_object_or_404,
-                              redirect,
-                              render)
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from .models import CommentLike, Post, Category
-from django.contrib.auth import login, logout, authenticate, REDIRECT_FIELD_NAME
+from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.views.generic import TemplateView, DetailView, RedirectView, ListView
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.core.exceptions import PermissionDenied, ValidationError
-from django.views import View
+User = get_user_model()
 
 
 class HomeView(TemplateView):
@@ -58,9 +42,24 @@ def like_comment(request):
     return HttpResponse(json.dumps(result), status=201)
 
 
+@csrf_exempt
+def create_comment(request):
+    data = json.loads(request.body)
+    user = request.user
+    try:
+        comment = Comment.objects.create(post_id=data['post_id'], content=data['content'], author=user)
+        response = {"comment_id": comment.id, "content": comment.content, 'dislike_count': 0, 'like_count': 0,
+                    'full_name': user.get_full_name()}
+        return HttpResponse(json.dumps(response), status=201)
+    except:
+        response = {"error": 'error'}
+        return HttpResponse(json.dumps(response), status=400)
+
+
 class SinglePost(DetailView):
     model = Post
     template_name = 'blog/post_single.html'
+
     def get_object(self):
         slug = self.kwargs.get('pk')
         return get_object_or_404(Post.objects.select_related('post_setting', 'category', 'author'), slug=slug)
@@ -71,9 +70,6 @@ class SinglePost(DetailView):
         context['comments'] = post.comments.all()
         context['settings'] = post.post_setting
         return context
-
-
-
 
 
 class SingleCategory(ListView):
@@ -92,65 +88,6 @@ class CategoresArchiveView(ListView):
     context_object_name = 'categories'
     queryset = Category.objects.all()
     template_name = 'blog/categories.html'
-
-
-class LogoutView(RedirectView):
-    url = '/posts/'
-
-    def get(self, request, *args, **kwargs):
-        logout(request)
-        return super(LogoutView, self).get(request, *args, **kwargs)
-
-
-class LoginView(View):
-    def get(self, request):
-        if request.user.is_authenticated:
-            return redirect('posts_archive')
-        return render(request, 'registration/login.html', {'form': AuthenticationForm})
-
-    def post(self, request):
-
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = authenticate(
-                request,
-                username=form.cleaned_data.get('username'),
-                password=form.cleaned_data.get('password')
-            )
-
-            if user is None:
-                return render(
-                    request,
-                    'registration/login.html',
-                    {'form': form, 'invalid_creds': True}
-                )
-
-            try:
-                form.confirm_login_allowed(user)
-            except ValidationError:
-                return render(
-                    request,
-                    'registration/login.html',
-                    {'form': form, 'invalid_creds': True}
-                )
-            login(request, user)
-
-            return redirect(reverse('posts_archive'))
-
-
-class RegisterView(View):
-    def get(self, request):
-        return render(request, 'registration/register.html', {'form': UserThirdRegistrationForm})
-
-    def post(self, request):
-        form = UserThirdRegistrationForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.set_password(form.cleaned_data['password'])
-            user.save()
-            return redirect(reverse('login'))
-
-        return render(request, 'registration/register.html', {'form': form})
 
 
 class AboutView(TemplateView):
