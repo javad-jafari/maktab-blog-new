@@ -98,6 +98,7 @@ class CategoresArchiveView(ListView):
 class AboutView(TemplateView):
     template_name = 'blog/about_us.html'
 
+
 class SearchResultsView(ListView):
     model = Post
     template_name = 'search/searchbar.html'
@@ -108,6 +109,7 @@ class SearchResultsView(ListView):
             Q(title__icontains=query) | Q(category__title__icontains=query)
         )
         return object_list
+
 
 def search_view(request):
     if request.method == 'GET':
