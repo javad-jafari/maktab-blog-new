@@ -1,6 +1,6 @@
 {% extends 'base/base.html' %}
 {% load static %}
-{% block title%}
+{% block title %}
     Home
 {% endblock %}
 
@@ -8,7 +8,8 @@
     <div class="container">
 
 
-        <div class="carousel slide carousel-fade" data-ride="carousel" data-aos="fade-up" data-aos-delay="300" id='carouselExampleIndicators'>
+        <div class="carousel slide carousel-fade" data-ride="carousel" data-aos="fade-up" data-aos-delay="300"
+             id='carouselExampleIndicators'>
 
             <ol class="carousel-indicators">
                 {% for pp in posts_promot %}
@@ -52,10 +53,10 @@
 
 
             <!-- Jumbotron Header -->
-            <header class="jumbotron my-4 " id="jum"  >
+            <header class="jumbotron my-4 " id="jum">
 
                 <h1 class="display-3 text-righ text-success">!به زوميت خوش آمديد</h1>
-{#                    <img src="" alt="" class="shadow-lg rounded ">#}
+                {#                    <img src="" alt="" class="shadow-lg rounded ">#}
                 <div class="container ">
                     <h2 class="text-danger small">كليك كن</h2>
                     <!-- Button to Open the Modal -->
@@ -112,28 +113,24 @@
                     </div>
                 {% endfor %}
 
-                <div class="container-fluid">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-center">
+                <div class="pagination">
+                        <span class="step-links">
                             {% if page_obj.has_previous %}
-                            <li class="page-item disabled">
-                                <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
-                            </li>
-                            {%endif%}
+                                <a href="?page=1">&laquo; first</a>
+                                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+                            {% endif %}
 
-                            <li class="page-item"><a class="page-link" href="#">{{ page_obj.number }}</a></li>
+                            <span class="current">
+                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                            </span>
 
                             {% if page_obj.has_next %}
-                            <li class="page-item">
-                                <a class="page-link" href="?page={{ page_obj.next_page_number }}" tabindex="1">Next</a>
-                            </li>
-                            {%endif%}
-                        </ul>
-                    </nav>
+                                <a href="?page={{ page_obj.next_page_number }}">next</a>
+                                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                            {% endif %}
+                        </span>
                 </div>
 
-                <!-- <a href="#">Previous Page</a>
-                <a href="#">Next Page</a> -->
 
             </div>
             <!-- /.row -->

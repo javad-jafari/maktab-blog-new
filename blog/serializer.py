@@ -29,8 +29,8 @@ class CommentSerializer(serializers.Serializer):
     def update(self, instance, validated_data):
         instance.content = validated_data.get('content', instance.content)
         instance.is_confirmed = validated_data.get('is_confirmed', instance.is_confirmed)
-        create_at = serializers.DateTimeField(read_only=True)
-        update_at = serializers.DateTimeField(read_only=True)
+        instance.create_at = serializers.DateTimeField(read_only=True)
+        instance.update_at = serializers.DateTimeField(read_only=True)
         instance.save()
         return instance
 
