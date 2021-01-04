@@ -12,20 +12,22 @@
              id='carouselExampleIndicators'>
 
             <ol class="carousel-indicators">
-                {% for pp in posts_promot %}
+                {% for pp in posts %}
+                    {% if pp.promote %}
                     {% if forloop.first %}
                         <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}"
                             class="active"></li>
                     {% else %}
                         <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}"></li>
-
+                    {% endif %}
                     {% endif %}
                 {% endfor %}
             </ol>
 
             <div class="carousel-inner">
-                {% for pp in posts_promot %}
-                    {% if forloop.first %}
+                {% for pp in posts %}
+                    {% if pp.promote %}
+                    {% if forloop.first%}
                         <div class="carousel-item active" data-interval="100">
                     {% else %}
                         <div class="carousel-item  " data-interval="100">
@@ -39,6 +41,7 @@
 
                 </div>
                 </div>
+                    {% endif %}
                 {% endfor %}
                 </div>
                 <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -56,7 +59,7 @@
             <header class="jumbotron my-4 " id="jum">
 
                 <h1 class="display-3 text-righ text-success">!به زوميت خوش آمديد</h1>
-                {#                    <img src="" alt="" class="shadow-lg rounded ">#}
+                <img src="" alt="" class="shadow-lg rounded ">
                 <div class="container ">
                     <h2 class="text-danger small">كليك كن</h2>
                     <!-- Button to Open the Modal -->
@@ -113,22 +116,9 @@
                     </div>
                 {% endfor %}
 
-                <div class="pagination">
-                        <span class="step-links">
-                            {% if page_obj.has_previous %}
-                                <a href="?page=1">&laquo; first</a>
-                                <a href="?page={{ page_obj.previous_page_number }}">previous</a>
-                            {% endif %}
+                <div class="container text-center">
+                    {% include 'component/paginate.html' with page=page_obj %}
 
-                            <span class="current">
-                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                            </span>
-
-                            {% if page_obj.has_next %}
-                                <a href="?page={{ page_obj.next_page_number }}">next</a>
-                                <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
-                            {% endif %}
-                        </span>
                 </div>
 
 

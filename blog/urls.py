@@ -1,7 +1,7 @@
 from django.urls import path, re_path
 from .views import like_comment, SingleCategory, SinglePost, search_view, SearchResultsView
 from .views import HomeView, AboutView, CategoresArchiveView, create_comment
-from .api import post_list,post_detail,comment_list,comment_detail
+from .api import post_list, post_detail, comment_list, comment_detail
 
 urlpatterns = [
 

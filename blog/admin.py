@@ -31,7 +31,7 @@ class PostSettingInline(admin.TabularInline):
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ('title', 'create_at', 'update_at',
-                    'publish_time', 'draft', 'category', 'author')
+                    'publish_time', 'draft','promote', 'category', 'author')
     search_fields = ('title',)
     list_filter = ('draft', 'category', 'author')
     date_hierarchy = 'publish_time'

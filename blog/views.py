@@ -1,4 +1,5 @@
-from django.db.models.query_utils import Q
+# from django.db.models.query_utils import Q
+from django.db.models import Q
 from django.http.response import Http404
 
 from blog.models import Comment
@@ -16,15 +17,11 @@ import json
 User = get_user_model()
 
 
-class HomeView(TemplateView):
+class HomeView(ListView):
+    paginate_by = 6
     template_name = 'blog/posts.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['posts'] = Post.objects.filter(draft=False)[:9]
-        context['category'] = Category.objects.all()
-        context['posts_promot'] = Post.objects.filter(promote=True)[:3]
-        return context
+    queryset = Post.objects.filter(draft=False)
+    context_object_name = 'posts'
 
 
 @csrf_exempt
@@ -117,6 +114,17 @@ def search_view(request):
         post = Post.objects.filter(Q(title__icontains=search))
         context = {'post': post}
         return render(request, 'search/searchbar.html', context)
+
+# class HomeView(TemplateView):
+#     template_name = 'blog/posts.html'
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context['posts'] = Post.objects.filter(draft=False)[:9]
+#         context['category'] = Category.objects.all()
+#         context['posts_promot'] = Post.objects.filter(promote=True)[:3]
+#         return context
+
 
 # def about_view(request):
 #     return render(request, 'blog/about_us.html' )
