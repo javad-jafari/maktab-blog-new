@@ -28,7 +28,8 @@
                         <i class="fa fa-lg fa-user-circle" aria-hidden="true"></i> {{ post.author.full_name }}</a>
                 {% endif %}
                 <p class="text-right">
-                <p> {{ post.publish_time.date }} :تاریخ انتشار</p>
+<!--                <p> {{ post.publish_time.date }} :تاریخ انتشار</p>-->
+                <p> {{ post.publish_time|date:"D d M Y" }} :تاریخ انتشار</p>
                 <p>
                     {{ post.category }} :
                     دسته بندی
@@ -46,20 +47,27 @@
 
                 <!-- Post Content -->
                 <p class="card-text">
-                    {{ post.content }}
+                    {{ post.content|safe }}
                 </p>
                 <hr class="bg-light">
 
                 {% if settings.allow_discussion %}
                     {% if settings.comment %}
-
+                    {% if request.user.is_authenticated %}
                         <!-- Comments Form -->
-                        <form id="comment_form" class="col-12" >
+
+                        <form id="comment_form" >
                             {% csrf_token %}
                             {% include 'component/commentform.html' %}
 
                             <input type="submit" value="ok" class="btn btn-outline-info mt-5">
                         </form>
+
+                    {% else %}
+                    <div class="col-lg-12 col-sm-6">
+                    <textarea class="form-control" rows="5" cols="100" readonly>برای ثبت نظر وارد شوید</textarea>
+                        </div>
+                    {% endif %}
                     {% endif %}
                     <!-- Single Comment -->
                     <div class='container adds' id="comment-bg">

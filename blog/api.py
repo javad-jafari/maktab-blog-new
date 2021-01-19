@@ -2,8 +2,10 @@ from django.http import HttpResponse, JsonResponse
 from django.http.response import Http404
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status, mixins, generics, viewsets
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.decorators import api_view, action
 from rest_framework.parsers import JSONParser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -14,6 +16,8 @@ from .serializer import PostSerializer, CommentSerializer, CategorySerializer
 class PostViewModel(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
 
     @action(detail=True, methods=["GET"])
     def comments(self, request, pk=None):
@@ -22,12 +26,12 @@ class PostViewModel(viewsets.ModelViewSet):
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
 
-    @action(detail=True, methods=["Post"])
+    @action(detail=True, methods=["POST"])
     def publish(self, request, pk=None):
         posts = self.get_object()
         posts.draft = False
         posts.save()
-        serializer = self.get_serializer(posts, many=True)
+        serializer = self.get_serializer(posts)
         return Response(serializer.data)
 
     @action(detail=False, methods=["GET"])
@@ -46,10 +50,62 @@ class CommentViewModel(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
 
+    @action(detail=False, methods=["GET"])
+    def not_confirm(self, request):
+        comments = Comment.objects.filter(is_confirmed=False)
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+    # @action()
+
 
 class CategoryViewModel(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # class PostList1(generics.ListCreateAPIView):
 #     queryset = Post.objects.all()
