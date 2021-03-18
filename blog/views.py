@@ -22,6 +22,7 @@ class HomeView(ListView):
     template_name = 'blog/posts.html'
     queryset = Post.objects.filter(draft=False)
     context_object_name = 'posts'
+   
 
 
 @csrf_exempt

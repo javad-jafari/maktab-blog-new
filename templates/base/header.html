@@ -22,7 +22,11 @@
           </li>
            <li class="nav-item">
                 {% if request.user.is_authenticated %}
+                <div class="btn-group " role="group" aria-label="Basic example">
+
                   <a class="nav-link text-danger" href="{% url 'logout' %}">خروج</a>
+                  <a class="nav-link text-info" href="{% url 'profile' request.user.id %}">پروفایل </a>
+                </div>
                 {% else %}
                 <div class="btn-group " role="group" aria-label="Basic example">
                   <a class="nav-link  text-white" href="{% url 'login' %}">ورود</a>
@@ -31,6 +35,7 @@
                   
                 {% endif %}
            </li>
+
         </ul>
 
 

@@ -1,0 +1,11 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %}
+    Profile
+{% endblock %}
+{% block body %}
+<div class="container bg-danger">
+hi {{user.full_name}}
+</div>
+    
+{% endblock  %}

@@ -16,7 +16,7 @@ router.register(r'categories', CategoryViewModel)
 
 urlpatterns = [
 
-    path('posts/', HomeView.as_view(), name='posts_archive'),
+    path('', HomeView.as_view(), name='posts_archive'),
     path('posts/<slug:pk>/', SinglePost.as_view(), name='post_single'),
     path('categories/', CategoresArchiveView.as_view(), name='categories_archive'),
     path('categories/<slug:pk>/', SingleCategory.as_view(), name='category_single'),

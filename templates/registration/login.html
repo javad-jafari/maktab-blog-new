@@ -3,9 +3,21 @@
 
 
 {% block body %}
+  <div class='d-flex align-items-center justify-content-center p-5 bg-light'>
+        <h1>ورود به سایت</h1>
+        </div>
 
     <div class="container d-flex align-items-center justify-content-center rounded rounded-pill" id="login-form">
-        <div class="col-8 ">
+         {% if form.non_field_errors %}
+                <ul class='form-errors'>
+                    {% for error in form.non_field_errors %}
+                        <p class='alert alert-danger'><small>{{ error }}</small></p>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        <div class="col-8 d-flex justify-content-center">
+        
+          
             <form action="{% url 'login' %}" method="post">
 
                 {% csrf_token %}
@@ -13,7 +25,7 @@
                     ایمیل
                 </label>
                 <p>{{ form.username }}</p>
-                <p class="help is-danger">{{ form.username.errors }}</p>
+                
 
 
                 <label for="{{ form.password.id_for_label }}" class="label">
@@ -22,12 +34,16 @@
 
                 <p>{{ form.password }}</p>
 
-                <p class="help is-danger">{{ form.password.errors }}</p>
+               
 
                 <input type="submit" value="ورود" class="btn btn-outline-info text-dark" id='btn-login'>
 
             </form>
+            
         </div>
     </div>
+        <div class='d-flex justify-content-center pb-5 bg-light'>
+        <a href="{% url 'reset_pass' %}">فراموشی رمز عبور</a>
+        </div>
 
 {% endblock %}
