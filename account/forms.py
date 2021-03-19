@@ -71,3 +71,8 @@ class UserThirdRegistrationForm(forms.ModelForm):
         if cd['password'] != cd['password2']:
             raise forms.ValidationError('Passwords don\'t match.')
         return cd['password2']
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = '__all__'

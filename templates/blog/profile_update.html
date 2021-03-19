@@ -1,0 +1,24 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+{% block body %}
+<div class='bg-light p-5 m-5'>
+
+    <h1 class="text-center reg-title">فرم ویرایش اطلاعات کاربری</h1>
+</div>
+
+    <div class="container" dir="rtl" id="regis-back">
+
+        <div class="row">
+
+            <div class="col-12 d-flex justify-content-center">
+                <form method="post" action="{% url 'profile_update' user.id %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{form.as_p}}
+                    <input type="submit" class="btn btn-outline-primary" value="ثبت تغییرات">
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

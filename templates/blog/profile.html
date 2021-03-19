@@ -1,11 +1,104 @@
 {% extends 'base/base.html' %}
 {% load static %}
-{% block title %}
-    Profile
-{% endblock %}
+
+{% block title %} userprofile {% endblock %}
+
 {% block body %}
-<div class="container bg-danger">
-hi {{user.full_name}}
-</div>
-    
-{% endblock  %}
+
+    <div class="container mt-5 mb-5" dir="rtl">
+        <div class="row border border-info rounded mb-5 bg-light">
+            <div class=" mx-5">
+                <ul>
+                    {% if user.avatar %}
+                        <li>
+
+                            <img style="width: 120px;height: 120px;margin:30px 0 20px 0"
+                                 src="{{ user.avatar.url }}">
+                        </li>
+                    {% else %}
+                        <li>
+                            <img style="width: 120px;height: 120px;margin:30px 0 20px 0"
+                                 src="https://upload.wikimedia.org/wikipedia/commons/6/67/User_Avatar.png">
+                        </li>
+                    {% endif %}
+
+                </ul>
+            </div>
+            <div class="mx-5 text-right">
+                <ul>
+                    <li>
+                        <label>پست الکترونیک </label>
+                        <p>{{ user.email }}</p>
+                    </li>
+
+                    <li>
+                        <label>شماره تلفن </label>
+                        <p>{{ user.mobile }}</p>
+                    </li>
+                </ul>
+            </div>
+            <div class="mx-5 text-right">
+                <ul>
+                    {% if user.first_name %}
+                        <li>
+                            <label>نام و نام خانوادگی </label>
+                            <p>{{ user.first_name }}</p>
+                        </li>
+                    {% else %}
+                        <li>
+                            <label>نام و نام خانوادگی </label>
+                            <p>None</p>
+                        </li>
+                    {% endif %}
+
+
+                    <li>
+                        <label> عضویت ویژه</label>
+                        <p>بله</p>
+                    </li>
+                </ul>
+            </div>
+            <div class="mx-5 text-right">
+                <ul>
+                    <li>
+                        <label>دریافت خبرنامه </label>
+                        <p> خیر </p>
+                    </li>
+
+                    <li>
+                        <label>نویسنده بلاگ </label>
+                        <p> خیر </p>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+
+        <div class="container text-center "><abbr title="می توانید از طریق این لینک پروفایل خود را ویرایش کنید">
+            <a href="{% url 'profile_update' request.user.id %}"><h3>ویرایش پروفایل </h3></a></abbr></div>
+
+        <div class="row border border-info mb-5 mt-5">
+            <div class="mx-5">
+                <ul class="list-group text-right ">
+                    <li class="list-group-item m-3"><h3 class="btn btn-outline-info">
+                        <a href="">نوشته های من</a></h3></li>
+
+                    <li class="list-group-item btn m-3"><h3 class="btn btn-outline-info">
+                        <a href="{% url 'change_password' %}">
+                            تغییر رمز عبور
+                        </a></h3></li>
+                    
+                    {% if request.user.is_staff %}
+                        <li class="list-group-item btn m-3"><h3 class="btn btn-outline-info">
+                            <a href=""> ایجاد پست جدید</a>
+
+                        </h3></li>
+                    {% endif %}
+                </ul>
+            </div>
+           
+
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %}تغییر رمز عبور{% endblock %}
+
+
+
+
+
+{% block body %}
+
+    <div class='bg-light m-5 p-5'>
+        <h1 class="text-center reg-title">تغییر رمز عبور</h1>
+    </div>
+    <div class="container" dir="rtl" id="regis-back">
+   
+
+
+
+
+
+{% if form.new_password1.errors %}<div class='alert alert-danger text-center col-9'>{{ form.new_password1.errors }}</div>{% endif %} 
+{% if form.new_password2.errors %}<div class='alert alert-danger text-center col-9'>{{ form.new_password2.errors }}</div>{% endif %}
+
+
+
+
+
+
+
+
+        <div class="row">
+
+            <div class="col-12 d-flex justify-content-center">
+                <form method="post" >
+                    {% csrf_token %}
+
+                    <p>
+                    <p>رمز عبور قبلی</p>
+                    {{form.old_password}}
+                    </p>
+
+
+                    <p>
+                    <p>رمز عبور جدید</p>
+                    {{form.new_password1}}
+                    </p>
+                    <p>
+                    <p>تکرار رمز عبور جدید </p>
+                    {{form.new_password2}}
+                    </p>
+
+                    <input type="submit" class="btn btn-outline-primary" value="تغییر رمز عبور">
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
