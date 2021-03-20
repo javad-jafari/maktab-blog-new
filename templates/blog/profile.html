@@ -39,10 +39,10 @@
             </div>
             <div class="mx-5 text-right">
                 <ul>
-                    {% if user.first_name %}
+                    {% if user.full_name %}
                         <li>
                             <label>نام و نام خانوادگی </label>
-                            <p>{{ user.first_name }}</p>
+                            <p>{{ user.full_name }}</p>
                         </li>
                     {% else %}
                         <li>
@@ -81,20 +81,46 @@
         <div class="row border border-info mb-5 mt-5">
             <div class="mx-5">
                 <ul class="list-group text-right ">
-                    <li class="list-group-item m-3"><h3 class="btn btn-outline-info">
-                        <a href="">نوشته های من</a></h3></li>
+                    <li class="list-group-item m-3">
+                        <a href="">نوشته های من</a></li>
 
-                    <li class="list-group-item btn m-3"><h3 class="btn btn-outline-info">
-                        <a href="{% url 'change_password' %}">
+                    <li class="list-group-item btn m-3">
+                        <a href="{% url 'change_password' %}" target='blank'>
                             تغییر رمز عبور
-                        </a></h3></li>
+                        </a></li>
                     
-                    {% if request.user.is_staff %}
-                        <li class="list-group-item btn m-3"><h3 class="btn btn-outline-info">
-                            <a href=""> ایجاد پست جدید</a>
+                    
+                </ul>
+            </div>
 
-                        </h3></li>
+                  <div class="mx-5">
+                <ul class="list-group text-right ">
+                    <li class="list-group-item m-3">
+                        <a href=""> ویرایش پست</a></li>
+
+                    <li class="list-group-item btn m-3">
+                        <a href="{% url 'reset_pass' %}" target='blank'>
+                            بازیابی رمز عبور
+                        </a></li>
+                    
+                   
+                </ul>
+            </div>
+
+                  <div class="mx-5">
+                <ul class="list-group text-right ">
+                    {% if request.user.is_staff %}
+
+                    <li class="list-group-item m-3">
+                        <a href="">ایجاد پست جدید</a></li>
                     {% endif %}
+
+                    <li class="list-group-item btn m-3">
+                        <a href="">
+                            درخواست برای نوشتن بلاگ
+                        </a></li>
+                    
+                        
                 </ul>
             </div>
            

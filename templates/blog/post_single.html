@@ -75,8 +75,11 @@
                     {% for comment in comments %}
                         <hr class="bg-danger ">
                         <div class="media mb-4 bg-secondary rounded" id="bg">
-
-                            <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+                        {% if comment.author.avatar%}
+                            <img class="d-flex mr-3 rounded-circle" src="{{comment.author.avatar.url}}" id="cm-img" alt="">
+                        {% else %}
+                        <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
+                        {%endif%}
                             <div class="media-body">
                                 <h5 class="mt-0 border-bottom">  {{ comment.author.full_name }}  </h5>
                                 <p> {{ comment.content }}</p>
