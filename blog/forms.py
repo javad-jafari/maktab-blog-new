@@ -1,8 +1,9 @@
 from django import forms
 from django.core.exceptions import ValidationError
+from django.db.models.base import Model
 from django.forms import fields
 from django.utils.translation import ugettext_lazy as _
-from blog.models import Comment
+from blog.models import Comment, Post, PostSetting
 from django.contrib.auth.models import User
 from blog.validators import validate_password, validate_username
 import re
@@ -95,3 +96,15 @@ class UserThirdRegistrationForm(forms.ModelForm):
         return cd['password2']
 
 
+class NewPostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        exclude = ['author']
+
+class NewPostSetForm(forms.ModelForm):
+    comment  = forms.BooleanField()
+    author = forms.BooleanField()
+    allow_discussion = forms.BooleanField()
+    class Meta:
+        model = PostSetting
+        fields = '__all__'

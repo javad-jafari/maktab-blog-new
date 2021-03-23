@@ -14,6 +14,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from blog.models import Post
 
 
 User = get_user_model()
@@ -99,4 +100,6 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         form.instance.email = self.request.user.email
         return super().form_valid(form)
+
+
     

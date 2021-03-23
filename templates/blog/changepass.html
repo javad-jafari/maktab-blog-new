@@ -17,7 +17,7 @@
 
 
 
-
+{% if form.old_password.errors %}<div class='alert alert-danger text-center col-9'>{{ form.old_password.errors }}</div>{% endif %} 
 {% if form.new_password1.errors %}<div class='alert alert-danger text-center col-9'>{{ form.new_password1.errors }}</div>{% endif %} 
 {% if form.new_password2.errors %}<div class='alert alert-danger text-center col-9'>{{ form.new_password2.errors }}</div>{% endif %}
 
@@ -33,11 +33,12 @@
             <div class="col-12 d-flex justify-content-center">
                 <form method="post" >
                     {% csrf_token %}
-
-                    <p>
+                    
+                    
+                    <div>
                     <p>رمز عبور قبلی</p>
                     {{form.old_password}}
-                    </p>
+                    </div>
 
 
                     <p>

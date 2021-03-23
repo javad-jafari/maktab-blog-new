@@ -1,18 +1,23 @@
 # from django.db.models.query_utils import Q
+from django.conf import settings
 from django.db.models import Q
 from django.http.response import Http404
-
+from django.contrib.auth.mixins import LoginRequiredMixin
+from blog.models import Post
 from blog.models import Comment
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from .models import CommentLike, Post, Category
+from .models import CommentLike, Post, Category, PostSetting
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
-from django.views.generic import TemplateView, DetailView, RedirectView, ListView
+from django.views.generic import TemplateView, DetailView, RedirectView, ListView,UpdateView,CreateView
+from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
-from blog.forms import CommentForm
+from blog.forms import CommentForm,NewPostForm,NewPostSetForm
 import json
+from django.views import View
+from django.http import HttpResponse, HttpResponseRedirect
 
 User = get_user_model()
 
@@ -69,8 +74,8 @@ class SinglePost(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         post = context['post']
-        context['comments'] = post.comments.all()
-        context['settings'] = post.post_setting
+        context['comments'] = post.comments.filter(post__slug = self.kwargs.get('pk'))
+        context['settings'] = PostSetting.objects.get(post__slug = self.kwargs.get('pk'))
         context['form'] = CommentForm()
         return context
 
@@ -97,6 +102,7 @@ class AboutView(TemplateView):
     template_name = 'blog/about_us.html'
 
 
+
 class SearchResultsView(ListView):
     model = Post
     template_name = 'search/searchbar.html'
@@ -116,19 +122,49 @@ def search_view(request):
         context = {'post': post}
         return render(request, 'search/searchbar.html', context)
 
-# class HomeView(TemplateView):
-#     template_name = 'blog/posts.html'
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context['posts'] = Post.objects.filter(draft=False)[:9]
-#         context['category'] = Category.objects.all()
-#         context['posts_promot'] = Post.objects.filter(promote=True)[:3]
-#         return context
 
 
-# def about_view(request):
-#     return render(request, 'blog/about_us.html' )
+def newpost(request):
+    post_form = NewPostForm(initial={'author':request.user})
+    setting_form = NewPostSetForm()
+
+         
+
+    if request.method == 'POST':
+        post_form = NewPostForm(request.POST,request.FILES ,initial={'author':request.user})
+        setting_form = NewPostSetForm(request.POST)
+
+        if post_form.is_valid():
+          
+            title=post_form.cleaned_data['title']
+            abstract=post_form.cleaned_data['abstract']
+            promote=post_form.cleaned_data['promote']
+            slug=post_form.cleaned_data['slug']
+            content=post_form.cleaned_data['content']
+            publish_time=post_form.cleaned_data['publish_time']
+            draft=post_form.cleaned_data['draft']
+            image=post_form.cleaned_data['image']
+            category =post_form.cleaned_data['category']
+            newpost = Post.objects.create(title=title,abstract= abstract,promote= promote,slug= slug,content= content,
+            publish_time= publish_time,draft=draft, image= image,
+            category= category,author=request.user )
+            newpost.save()
+
+
+    return render(request, 'blog/new_post_create.html', {
+        'post_form': post_form,
+        'setting_form' : setting_form
+        
+    })
+
+
+
+
+
+
+
+
+
 
 # def register_view(request):
 #     if request.method == 'POST':

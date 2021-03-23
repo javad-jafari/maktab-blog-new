@@ -6,15 +6,18 @@
   <div class='d-flex align-items-center justify-content-center p-5 bg-light'>
         <h1>ورود به سایت</h1>
         </div>
-
-    <div class="container d-flex align-items-center justify-content-center rounded" id="login-form">
-         {% if form.non_field_errors %}
-                <ul class='form-errors'>
+           {% if form.non_field_errors %}
+                <ul class='form-errors d-flex align-items-center justify-content-center'>
                     {% for error in form.non_field_errors %}
-                        <p class='alert alert-danger'><small>{{ error }}</small></p>
+                
+                        <p class='alert alert-danger'>{{ error }}</p>
+                        
                     {% endfor %}
                 </ul>
             {% endif %}
+
+    <div class="container d-flex align-items-center justify-content-center rounded" id="login-form">
+      
         <div class="col-8 d-flex justify-content-center">
         
           
