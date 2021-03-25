@@ -8,7 +8,7 @@
     <div class="container mt-5 mb-5" dir="rtl">
         <div class="row border border-info rounded mb-5 bg-light">
             <div class=" mx-5">
-                <ul>
+                <ul style='list-style-type:none'>
                     {% if user.avatar %}
                         <li>
 
@@ -22,10 +22,10 @@
                         </li>
                     {% endif %}
 
-                </ul>
+                </ul style='list-style-type:none'>
             </div>
             <div class="mx-5 text-right">
-                <ul>
+                <ul style='list-style-type:none'>
                     <li>
                         <label>پست الکترونیک </label>
                         <p>{{ user.email }}</p>
@@ -35,10 +35,10 @@
                         <label>شماره تلفن </label>
                         <p>{{ user.mobile }}</p>
                     </li>
-                </ul>
+                </ul style='list-style-type:none'>
             </div>
             <div class="mx-5 text-right">
-                <ul>
+                <ul style='list-style-type:none'>
                     {% if user.full_name %}
                         <li>
                             <label>نام و نام خانوادگی </label>
@@ -56,10 +56,10 @@
                         <label> عضویت ویژه</label>
                         <p>بله</p>
                     </li>
-                </ul>
+                </ul style='list-style-type:none'>
             </div>
             <div class="mx-5 text-right">
-                <ul>
+                <ul style='list-style-type:none'>
                     <li>
                         <label>دریافت خبرنامه </label>
                         <p> خیر </p>
@@ -69,7 +69,7 @@
                         <label>نویسنده بلاگ </label>
                         <p> خیر </p>
                     </li>
-                </ul>
+                </ul style='list-style-type:none'>
             </div>
 
         </div>
@@ -82,7 +82,7 @@
             <div class="mx-5">
                 <ul class="list-group text-right ">
                     <li class="list-group-item m-3">
-                        <a href="">نوشته های من</a></li>
+                        <a href="{% url 'bloger_post' request.user.id %}">نوشته های من</a></li>
 
                     <li class="list-group-item btn m-3">
                         <a href="{% url 'change_password' %}" target='blank'>
@@ -112,7 +112,7 @@
                     {% if request.user.is_staff %}
 
                     <li class="list-group-item m-3">
-                        <a href="">ایجاد پست جدید</a></li>
+                        <a href="{% url 'new_post' %}">ایجاد پست جدید</a></li>
                     {% endif %}
 
                     <li class="list-group-item btn m-3">

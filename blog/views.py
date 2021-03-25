@@ -1,8 +1,6 @@
 # from django.db.models.query_utils import Q
 from django.conf import settings
 from django.db.models import Q
-from django.http.response import Http404
-from django.contrib.auth.mixins import LoginRequiredMixin
 from blog.models import Post
 from blog.models import Comment
 from django.http import HttpResponse
@@ -11,14 +9,14 @@ from django.urls import reverse
 from .models import CommentLike, Post, Category, PostSetting
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
-from django.views.generic import TemplateView, DetailView, RedirectView, ListView,UpdateView,CreateView
+from django.views.generic import TemplateView, DetailView, ListView
 from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 from blog.forms import CommentForm,NewPostForm,NewPostSetForm
 import json
-from django.views import View
-from django.http import HttpResponse, HttpResponseRedirect
 
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required,permission_required
 User = get_user_model()
 
 
@@ -122,17 +120,14 @@ def search_view(request):
         context = {'post': post}
         return render(request, 'search/searchbar.html', context)
 
-
+@login_required(login_url='/accounts/login')
 
 def newpost(request):
     post_form = NewPostForm(initial={'author':request.user})
-    setting_form = NewPostSetForm()
-
          
 
     if request.method == 'POST':
         post_form = NewPostForm(request.POST,request.FILES ,initial={'author':request.user})
-        setting_form = NewPostSetForm(request.POST)
 
         if post_form.is_valid():
           
@@ -149,21 +144,47 @@ def newpost(request):
             publish_time= publish_time,draft=draft, image= image,
             category= category,author=request.user )
             newpost.save()
-
+            return redirect('new_post_set')
 
     return render(request, 'blog/new_post_create.html', {
         'post_form': post_form,
-        'setting_form' : setting_form
+        
         
     })
 
 
+@login_required(login_url='/accounts/login')
+@permission_required('', raise_exception=True)
+def post_set(request):
+    user_post = Post.objects.filter(author=request.user)
+
+    setting_form = NewPostSetForm()
+    if request.POST:
+        setting_form = NewPostSetForm(request.POST)
+
+        if setting_form.is_valid():
+            setting_form.save()
+
+    return render(request ,'blog/post_set.html' ,{"set_form":setting_form})
 
 
 
 
 
+class BlogerPostView(DetailView):
+    model =Post
+    paginate_by = 1
+    template_name = "blog/bloger_posts.html"
+    context_object_name = "posts"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["posts"] = Post.objects.filter(author__id=self.kwargs.get('pk'))
+        context["author"] = User.objects.get(id=self.kwargs.get('pk'))
 
+
+        return context
+    
 
 
 # def register_view(request):

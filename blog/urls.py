@@ -1,6 +1,6 @@
 from django.urls import path, re_path, include
-from .views import like_comment, SingleCategory, SinglePost, search_view, SearchResultsView,newpost
-from .views import HomeView, AboutView, CategoresArchiveView, create_comment
+from .views import like_comment, SingleCategory, SinglePost, search_view, SearchResultsView,newpost,post_set
+from .views import HomeView, AboutView, CategoresArchiveView, create_comment,BlogerPostView
 from .api import CommentViewModel
 # from .api import post_list, post_detail,comment_list, comment_detail
 # from .api import PostView, PostDetailView
@@ -26,5 +26,11 @@ urlpatterns = [
     path('searchbar/', SearchResultsView.as_view(), name='searchbar'),
     path('comments/', create_comment, name='add_comment'),
     path('posts/create/v1/', newpost, name='new_post'),
+    path('posts/setting/create/v1/', post_set, name='new_post_set'),
+    path('posts/bloger/v1/<int:pk>', BlogerPostView.as_view(), name='bloger_post'),
+
+
+
+
   
 ]

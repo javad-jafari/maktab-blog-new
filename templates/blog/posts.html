@@ -62,10 +62,15 @@
                                 </h5>
 
                                 <p class="card-text">{{ post.abstract }}</p>
+                                <hr>
+                                <p class='badge'>{{post.create_at|timesince}} </p>
+
 
                             </div>
                             <div class="card-footer">
+
                                 <a href="{% url 'post_single' post.slug %}" class="btn btn-primary">بیشتر بدانید</a>
+
                             </div>
                         </div>
                     </div>

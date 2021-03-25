@@ -8,8 +8,7 @@
 <form method='post' enctype="multipart/form-data" action='{% url 'new_post' %}'>
 {% csrf_token %}
 {{post_form.as_p}}
-<hr class='bg-danger'>
-{{setting_form.as_p}}
+
     <input type="submit" class="btn btn-outline-primary" value="ثبت تغییرات">
 </form>
 </div>

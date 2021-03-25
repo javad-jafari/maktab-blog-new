@@ -24,7 +24,7 @@
 
                 <!-- Date/Time -->
                 {% if settings.author %}
-                    <a href="#" class="border border-1 btn btn-outline-info btn-sm ">
+                    <a href="{% url 'bloger_post' post.author.id %}" class="border border-1 btn btn-outline-info btn-sm ">
                        
                      <i class="fa fa-lg fa-user-circle" aria-hidden="true"></i> {{ post.author.full_name }}</a>
                             

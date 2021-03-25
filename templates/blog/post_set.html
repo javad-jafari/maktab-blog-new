@@ -1,0 +1,20 @@
+{% extends 'base/base.html' %}
+
+{% load static %}
+
+
+{% block body  %}
+<div class='bg-primary d-flex justify-content-center m-5 p-5 rounded'><p>برای انتشار پست شما لازم است تنظیمات پست را اعمال کنید</p></div>
+
+<div class='d-flex justify-content-center m-5 p-5 bg-warning rounded'>
+
+<form method='post'>
+    {% csrf_token %}
+    {{set_form.as_p}}
+
+    <input type="submit" class="btn btn-outline-primary" value="ثبت تغییرات">
+
+</form>
+
+</div>
+{% endblock  %}

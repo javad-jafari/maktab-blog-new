@@ -102,9 +102,6 @@ class NewPostForm(forms.ModelForm):
         exclude = ['author']
 
 class NewPostSetForm(forms.ModelForm):
-    comment  = forms.BooleanField()
-    author = forms.BooleanField()
-    allow_discussion = forms.BooleanField()
     class Meta:
         model = PostSetting
         fields = '__all__'
