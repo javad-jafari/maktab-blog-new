@@ -6,8 +6,9 @@ from django.utils.translation import ugettext_lazy as _
 from blog.models import Comment, Post, PostSetting
 from django.contrib.auth.models import User
 from blog.validators import validate_password, validate_username
+from ckeditor.widgets import CKEditorWidget
 import re
-
+import datetime
 
 class UserRegistrationForm(forms.Form):
     username = forms.CharField(label=_('نام کاربری'), max_length=150, required=True,
@@ -96,7 +97,24 @@ class UserThirdRegistrationForm(forms.ModelForm):
         return cd['password2']
 
 
+
+#--------------------------------------------------------------------------------------------------
+def get_today():
+    return datetime.datetime.now().date()
+
+def get_tomorrow():
+    return (datetime.datetime.now() + datetime.timedelta(days=1)).date() 
+
+TODAY = get_today
+TOMORROW = get_tomorrow
+DATE_SELECTION = (
+        (TODAY, "Today"),
+        (TOMORROW, "Tomorrow"),
+    )
+
 class NewPostForm(forms.ModelForm):
+    publish_time = forms.DateField(input_formats=["%Y-%m-%d"], widget=forms.Select(choices=DATE_SELECTION))
+    content = forms.CharField(label=_('content'), widget=CKEditorWidget)
     class Meta:
         model = Post
         exclude = ['author']

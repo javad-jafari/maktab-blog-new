@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
-from .models import Post, Comment, Category
+from .models import Post, Comment, Category, PostSetting
 from account.serializer import UserSerializer
 
 User = get_user_model()
@@ -13,13 +13,21 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = '__all__'
 
-
 class PostSerializer(serializers.ModelSerializer):
     comments = CommentSerializer(many=True,read_only=True)
+    
+
     class Meta:
         model = Post
         fields = '__all__'
 
+
+class PostSetSerializer(serializers.ModelSerializer):
+    post = PostSerializer(read_only=True)
+
+    class Meta:
+        model = PostSetting
+        fields = '__all__'
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:

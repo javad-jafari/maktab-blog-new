@@ -9,15 +9,15 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Post, Comment, Category
-from .serializer import PostSerializer, CommentSerializer, CategorySerializer
+from .models import Post, Comment, Category, PostSetting
+from .serializer import PostSerializer, CommentSerializer, CategorySerializer, PostSetSerializer
 
 
 class PostViewModel(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [SessionAuthentication, BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [ BasicAuthentication]
+    # permission_classes = [IsAuthenticated]
 
     @action(detail=True, methods=["GET"])
     def comments(self, request, pk=None):
@@ -55,14 +55,41 @@ class CommentViewModel(viewsets.ModelViewSet):
         comments = Comment.objects.filter(is_confirmed=False)
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
-    # @action()
+    
+    @action(detail=False, methods=["GET"])
+    def confirm(self, request):
+        comments = Comment.objects.filter(is_confirmed=True)
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+    
 
 
 class CategoryViewModel(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+    @action(detail=False, methods=["GET"])
+    def main_category(self, request):
+        mc = Category.objects.filter(parent=None)
+        serializer = CategorySerializer(mc, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=False, methods=["GET"])
+    def sub_category(self, request):
+        subcat = Category.objects.exclude(parent=None)
+        serializer = CategorySerializer(subcat, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=False, methods=["GET"])
+    def all_category(self, request):
+        cat = Category.objects.all()
+        serializer = CategorySerializer(cat, many=True)
+        return Response(serializer.data)
 
+
+class PostSetViewModel(viewsets.ModelViewSet):
+    queryset = PostSetting.objects.all()
+    serializer_class = PostSetSerializer
 
 
 

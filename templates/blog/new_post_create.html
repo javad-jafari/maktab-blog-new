@@ -1,18 +1,70 @@
 {% extends 'base/base.html' %}
 {% load static %}
-
+{% load crispy_forms_tags %}
 
 {% block body %}
 
-<div class = "container d-flex justify-content-center bg-warning p-3 border border-radius m-5">
-<form method='post' enctype="multipart/form-data" action='{% url 'new_post' %}'>
-{% csrf_token %}
-{{post_form.as_p}}
-
-    <input type="submit" class="btn btn-outline-primary" value="ثبت تغییرات">
-</form>
+<div class='d-flex justify-content-center m-5 p-5 bg-light rounded'>
+<h1>ایجاد پست جدید</h1>
 </div>
 
+<div class='d-flex justify-content-center m-5 p-5 bg-light rounded'>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group col-md-6 mb-0">
+        {{ post_form.title|as_crispy_field }}
+      </div>
+      <div class="form-group col-md-6 mb-0">
+        {{ post_form.abstract|as_crispy_field }}
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-6 mb-0">
+        {{ post_form.slug|as_crispy_field }}
+      </div>
+      <div class="form-group col-md-6 mb-0">
+        {{ post_form.category|as_crispy_field }}
+      </div>
+    </div>
 
 
+
+
+    <div class="form-group mb-0">
+    {{ post_form.content|as_crispy_field }}
+    </div>
+
+
+
+    <hr>
+        <div class="form-row">
+            <div class="form-group col-md-4 mb-0">
+                {{ post_form.draft|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-4 mb-0">
+                {{ post_form.promote|as_crispy_field }}
+            </div>
+            <div class="form-group col-md-4 mb-0">
+                {{ post_form.image|as_crispy_field }}
+            </div>
+        </div>
+    <hr>
+
+    <div class="form-group mb-0 d-flex justify-content-end">
+        {{ post_form.publish_time|as_crispy_field }}
+    </div>
+
+
+    <button type="submit" class="btn btn-outline-primary p-3 m-5">ایجاد پست</button>
+  </form>
+  </div>
+{% endblock %}
+
+{% block javascript %}
+
+<script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
+<script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
 {% endblock %}

@@ -1,16 +1,57 @@
 {% extends 'base/base.html' %}
 
 {% load static %}
+{% load crispy_forms_tags %}
 
 
 {% block body  %}
-<div class='bg-primary d-flex justify-content-center m-5 p-5 rounded'><p>برای انتشار پست شما لازم است تنظیمات پست را اعمال کنید</p></div>
 
-<div class='d-flex justify-content-center m-5 p-5 bg-warning rounded'>
+{% if messages %}
+{% for message in messages %}
+    <div class="d-flex justify-content-center m-5 {% if message.tags %}bg-{{ message.tags }}{% endif %} border rounded">
+    
+    <p class="p-3">{{ message }}</p>
+    
+    </div>
+    {% endfor %}
+{% endif %}
+
+
+
+
+
+
+
+
+
+
+<div class='bg-light d-flex justify-content-center m-5 p-5 rounded'><p>برای انتشار پست شما لازم است تنظیمات پست را اعمال کنید</p></div>
+
+<div class='d-flex justify-content-center m-5 p-5 bg-light rounded'>
 
 <form method='post'>
     {% csrf_token %}
-    {{set_form.as_p}}
+
+    <h5>کدام پست را انتخاب می کنید</h5>
+    <div class="form-group mb-0 d-flex justify-content-end">
+        {{ set_form.post|as_crispy_field }}
+    </div>
+
+
+<hr>
+    <h5>شرایط پست</h5>
+
+    <div class="form-row">
+      <div class="form-group col-md-4 mt-5">
+        {{ set_form.comment|as_crispy_field }}
+      </div>
+      <div class="form-group col-md-4 mt-5">
+        {{ set_form.author|as_crispy_field }}
+      </div>
+            <div class="form-group col-md-4 mt-5">
+        {{ set_form.allow_discussion|as_crispy_field }}
+      </div>
+    </div>
 
     <input type="submit" class="btn btn-outline-primary" value="ثبت تغییرات">
 

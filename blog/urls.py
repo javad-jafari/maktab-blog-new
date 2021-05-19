@@ -6,13 +6,15 @@ from .api import CommentViewModel
 # from .api import PostView, PostDetailView
 # from .api import PostList, PostDetail
 # from .api import PostList1, PostDetail1
-from .api import PostViewModel,CategoryViewModel
+from .api import PostViewModel,CategoryViewModel,PostSetViewModel
 from rest_framework.routers import DefaultRouter
 from zoomit.urls import router
 # router = DefaultRouter()
 router.register(r'posts', PostViewModel)
 router.register(r'comments', CommentViewModel)
 router.register(r'categories', CategoryViewModel)
+router.register(r'settings', PostSetViewModel)
+
 
 urlpatterns = [
 
@@ -27,7 +29,7 @@ urlpatterns = [
     path('comments/', create_comment, name='add_comment'),
     path('posts/create/v1/', newpost, name='new_post'),
     path('posts/setting/create/v1/', post_set, name='new_post_set'),
-    path('posts/bloger/v1/<int:pk>', BlogerPostView.as_view(), name='bloger_post'),
+    path('posts/bloger/<int:pk>', BlogerPostView.as_view(), name='bloger_post'),
 
 
 

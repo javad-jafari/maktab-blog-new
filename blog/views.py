@@ -3,7 +3,7 @@ from django.conf import settings
 from django.db.models import Q
 from blog.models import Post
 from blog.models import Comment
-from django.http import HttpResponse
+from django.http import HttpResponse, request
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from .models import CommentLike, Post, Category, PostSetting
@@ -14,9 +14,11 @@ from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 from blog.forms import CommentForm,NewPostForm,NewPostSetForm
 import json
-
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required,permission_required
+from django.contrib import messages
+from django.utils.translation import ugettext_lazy as _
+
 User = get_user_model()
 
 
@@ -154,7 +156,7 @@ def newpost(request):
 
 
 @login_required(login_url='/accounts/login')
-@permission_required('', raise_exception=True)
+
 def post_set(request):
     user_post = Post.objects.filter(author=request.user)
 
@@ -164,6 +166,10 @@ def post_set(request):
 
         if setting_form.is_valid():
             setting_form.save()
+            messages.add_message(request, messages.success, 'conditiond had been saved')
+        else:
+                    
+            messages.warning(request, _('Please correct the error below.'))
 
     return render(request ,'blog/post_set.html' ,{"set_form":setting_form})
 
@@ -172,17 +178,16 @@ def post_set(request):
 
 
 class BlogerPostView(DetailView):
-    model =Post
     paginate_by = 1
     template_name = "blog/bloger_posts.html"
-    context_object_name = "posts"
-    
+
+    def get_queryset(self) :
+        return User.objects.filter(id=self.kwargs.get('pk'))
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["posts"] = Post.objects.filter(author__id=self.kwargs.get('pk'))
         context["author"] = User.objects.get(id=self.kwargs.get('pk'))
-
-
         return context
     
 
