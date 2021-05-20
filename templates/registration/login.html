@@ -1,11 +1,16 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 
 {% block body %}
-  <div class='d-flex align-items-center justify-content-center p-5 bg-light'>
-        <h1>ورود به سایت</h1>
+    <div class='container d-flex justify-content-center p-5 col-6 bg-light rounded'>
+
+        <div>
+            <h3>ورود به سایت</h3>
         </div>
+    </div>
+
            {% if form.non_field_errors %}
                 <ul class='form-errors d-flex align-items-center justify-content-center'>
                     {% for error in form.non_field_errors %}
@@ -16,7 +21,7 @@
                 </ul>
             {% endif %}
 
-    <div class="container d-flex align-items-center justify-content-center rounded" id="login-form">
+    <div class="container d-flex align-items-center col-6 justify-content-center rounded bg-light mt-5 mb-5 pb-5 pt-5" >
       
         <div class="col-8 d-flex justify-content-center">
         
@@ -24,29 +29,22 @@
             <form action="{% url 'login' %}" method="post">
 
                 {% csrf_token %}
-                <label for="{{ form.username.id_for_label }}" class="label">
-                    ایمیل
-                </label>
-                <p>{{ form.username }}</p>
-                
+            
+                <p>{{ form.username|as_crispy_field  }}</p>
 
-
-                <label for="{{ form.password.id_for_label }}" class="label">
-                    رمز عبور
-                </label>
-
-                <p>{{ form.password }}</p>
+                <p>{{ form.password|as_crispy_field  }}</p>
 
                
 
-                <input type="submit" value="ورود" class="btn btn-outline-info text-dark" id='btn-login'>
+                <input type="submit" value="ورود" class="btn btn-outline-primary text-dark d-flex justify-content-end" >
+                <a href="{% url 'reset_pass' %}">?فراموشی رمز عبور</a>
+
 
             </form>
             
         </div>
+        
     </div>
-        <div class='d-flex justify-content-center pb-5 bg-light'>
-        <a href="{% url 'reset_pass' %}">فراموشی رمز عبور</a>
-        </div>
+
 
 {% endblock %}

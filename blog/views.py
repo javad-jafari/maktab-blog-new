@@ -166,7 +166,7 @@ def post_set(request):
 
         if setting_form.is_valid():
             setting_form.save()
-            messages.add_message(request, messages.success, 'conditiond had been saved')
+            messages.success(request, _('ok you create it !'))
         else:
                     
             messages.warning(request, _('Please correct the error below.'))

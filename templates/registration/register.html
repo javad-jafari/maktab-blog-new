@@ -1,16 +1,18 @@
 
 {% extends 'base/base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
+
 
 {% block title %}
     Register
 {% endblock %}
 
 {% block body %}
-<div class="container text-center rounded" id="reg2-back">
+<div class="container text-center bg-light col-6 rounded p-3 mb-2">
     <h1 class="">فرم ثبت نام</h1>
 </div>
-    <div class="container rounded d-flex justify-content-center" dir="rtl" id="regis-back">
+    <div class="container rounded d-flex justify-content-center bg-light col-6 p-5 mb-5" dir="rtl">
         <div class="row">
             <div class="col-12">
                 <form method="post" action="{% url 'register' %}">
