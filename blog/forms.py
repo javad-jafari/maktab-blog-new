@@ -1,14 +1,18 @@
 from django import forms
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db.models.base import Model
 from django.forms import fields
+from django.forms.widgets import ChoiceWidget
 from django.utils.translation import ugettext_lazy as _
-from blog.models import Comment, Post, PostSetting
+from blog.models import Category, Comment, Post, PostSetting
 from django.contrib.auth.models import User
 from blog.validators import validate_password, validate_username
 from ckeditor.widgets import CKEditorWidget
 import re
 import datetime
+from blog.models import Post
+# User = get_user_model()
 
 class UserRegistrationForm(forms.Form):
     username = forms.CharField(label=_('نام کاربری'), max_length=150, required=True,
@@ -118,8 +122,9 @@ class NewPostForm(forms.ModelForm):
     class Meta:
         model = Post
         exclude = ['author']
+        
 
 class NewPostSetForm(forms.ModelForm):
     class Meta:
-        model = PostSetting
+        model = PostSetting   
         fields = '__all__'

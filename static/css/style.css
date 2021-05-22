@@ -1,0 +1,52 @@
+
+body{
+    font-family:BYekan,'BYekan',tahoma;;
+    text-align: right;
+    background-color: #4e555b;
+    padding-top: 60px;
+    height: auto;
+}
+#slider-img{
+    width: 100%;
+    height: 450px;
+}
+#img-posts{
+    width: 100%;
+    height: 200px;
+}
+#content-img{
+    width: 100%;
+    height: 400px;
+}
+
+
+#categories-back{
+    width: 500px;
+    height: auto;
+    /*height: 900px !important;*/
+    padding-top: 60px;
+    padding-bottom: 60px;
+    margin-bottom: 60px;
+}
+
+#parchive-back{
+    padding-top: 60px;
+}
+
+#about-back{
+
+    width: 500px;
+    height: 500px;
+    padding-top: 60px;
+    background-color: rgb(223, 171, 153);
+    
+}
+
+#comment-bg{
+    height: auto;
+}
+
+#cm-img {
+    width: 50px;
+    height: 50px;
+}

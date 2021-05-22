@@ -1,21 +1,24 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
+
 {% block title %}{% endblock %}
 {% block body %}
-<div class='bg-light p-5 m-5'>
-
-    <h1 class="text-center reg-title">فرم ویرایش اطلاعات کاربری</h1>
+<div class="container text-center bg-light col-6 rounded p-5 mb-2">
+    <h1 class="">ویرایش اطلاعات کاربری</h1>
 </div>
 
-    <div class="container" dir="rtl" id="regis-back">
+    <div class="container col-4" dir="rtl" >
 
         <div class="row">
 
-            <div class="col-12 d-flex justify-content-center">
+            <div class="col-12 d-flex justify-content-center bg-light rounded mt-5 mb-5">
                 <form method="post" action="{% url 'profile_update' user.id %}" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {{form.as_p}}
-                    <input type="submit" class="btn btn-outline-primary" value="ثبت تغییرات">
+                    {% for field in form %}
+                    {{field|as_crispy_field}}
+                    {% endfor%}
+                    <input type="submit" class="btn btn-outline-primary mb-5" value="ثبت تغییرات">
                 </form>
             </div>
         </div>

@@ -133,19 +133,9 @@ def newpost(request):
 
         if post_form.is_valid():
           
-            title=post_form.cleaned_data['title']
-            abstract=post_form.cleaned_data['abstract']
-            promote=post_form.cleaned_data['promote']
-            slug=post_form.cleaned_data['slug']
-            content=post_form.cleaned_data['content']
-            publish_time=post_form.cleaned_data['publish_time']
-            draft=post_form.cleaned_data['draft']
-            image=post_form.cleaned_data['image']
-            category =post_form.cleaned_data['category']
-            newpost = Post.objects.create(title=title,abstract= abstract,promote= promote,slug= slug,content= content,
-            publish_time= publish_time,draft=draft, image= image,
-            category= category,author=request.user )
-            newpost.save()
+            new_post= post_form.save(commit=False)
+            new_post.author = request.user
+            new_post.save()
             return redirect('new_post_set')
 
     return render(request, 'blog/new_post_create.html', {
@@ -158,9 +148,11 @@ def newpost(request):
 @login_required(login_url='/accounts/login')
 
 def post_set(request):
-    user_post = Post.objects.filter(author=request.user)
+    user_post = Post.objects.filter(author=request.user).first()
 
-    setting_form = NewPostSetForm()
+    dictt = {'post':user_post}
+    setting_form = NewPostSetForm(dictt)
+
     if request.POST:
         setting_form = NewPostSetForm(request.POST)
 
