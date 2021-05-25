@@ -69,7 +69,9 @@ class SinglePost(DetailView):
 
     def get_object(self):
         slug = self.kwargs.get('pk')
-        return get_object_or_404(Post.objects.select_related('post_setting', 'category', 'author'), slug=slug)
+        item = get_object_or_404(Post.objects.select_related('post_setting', 'category', 'author'), slug=slug)
+        item.incrementViewCount()
+        return item
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -136,34 +138,18 @@ def newpost(request):
             new_post= post_form.save(commit=False)
             new_post.author = request.user
             new_post.save()
-            return redirect('new_post_set')
+            PostSetting.objects.create(post_id=new_post.id,comment=True ,author=True ,allow_discussion=True)
+            messages.success(request, _('ok you create it !'))
 
-    return render(request, 'blog/new_post_create.html', {
+
+    return render(request, 'profiles/new_post_create.html', {
         'post_form': post_form,
         
         
     })
 
 
-@login_required(login_url='/accounts/login')
 
-def post_set(request):
-    user_post = Post.objects.filter(author=request.user).first()
-
-    dictt = {'post':user_post}
-    setting_form = NewPostSetForm(dictt)
-
-    if request.POST:
-        setting_form = NewPostSetForm(request.POST)
-
-        if setting_form.is_valid():
-            setting_form.save()
-            messages.success(request, _('ok you create it !'))
-        else:
-                    
-            messages.warning(request, _('Please correct the error below.'))
-
-    return render(request ,'blog/post_set.html' ,{"set_form":setting_form})
 
 
 

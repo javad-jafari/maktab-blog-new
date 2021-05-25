@@ -1,0 +1,82 @@
+{% extends 'profiles/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}{% block title-meta %}
+	پروفایل کاربری
+{% endblock %}{% endblock %}
+
+{% block main %}
+<div class="col-md-12">
+  <div class="card card-primary">
+    <div class="card-header">
+      <h3 class="card-title mb-0 float-left">پروفایل کاربری</h3>
+    </div>
+		<div class="card-body">
+		<div class="col-12 d-flex justify-content-center bg-light rounded mt-5 mb-5">
+
+			<form method="post" enctype="multipart/form-data">{% csrf_token %}
+                <form method="post"  enctype="multipart/form-data">
+                    {% csrf_token %}
+
+					{% if user.avatar %}
+					<div class="form-group col-md-6 mb-5 mt-5">
+					<img src="{{ user.avatar.url }}" class="img-thumbnail elevation-3" width=120 height=120 alt="{{user.email}}">
+					</div>
+					{% else %}
+					<div class="form-group col-md-6 mb-5 mt-5">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/67/User_Avatar.png" width=100 height=100>
+					</div>
+					{%endif%}
+
+
+
+					<div class="form-row">
+						<div class="form-group col-md-6 mb-5">
+							{{ form.full_name|as_crispy_field }}
+						</div>
+
+						<div class="form-group col-md-6 mb-5">
+							{{ form.avatar|as_crispy_field }}
+						</div>
+					</div>
+					<hr>
+					<div class="form-row">
+						<div class="form-group col-md-6 mb-5">
+									
+							{% if user.mobile %}
+							{{ user.mobile }}
+							{% else %}
+								cellphone:xxx
+							{% endif %}
+
+						</div>
+						
+						<div class="form-group col-md-6 mb-5">
+							{{ user.email }}
+						</div>
+					</div>
+
+
+
+
+  
+
+		</div>
+				<button class="btn btn-success">ویرایش اطلاعات</button>
+			</form>
+		</div>
+
+
+
+
+
+			<div class="container">
+		      	<div class="alert alert-warning">
+			      	<label>گذرواژه</label>
+			      	<p class="mb-0">برای تغییر گذرواژه <a class="alert-link" href="{% url 'change_password' %}">کلیک</a> کنید.</p>
+		        </div>
+		    </div>
+
+
+						
+{% endblock %}

@@ -36,6 +36,7 @@ class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_("Author"),
                                related_name='posts', related_query_name='children',
                                on_delete=models.SET_NULL, null=True, blank=True)
+    seen = models.PositiveIntegerField(_("seen"),default=0)
 
     class Meta:
         verbose_name = _("Post")
@@ -44,6 +45,11 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+        
+    def incrementViewCount(self):
+        self.seen += 1
+        self.save()
+        return self.seen
 
 
 class PostSetting(models.Model):

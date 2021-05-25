@@ -1,0 +1,79 @@
+{% load static %}
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="#" class="brand-link">
+      <img src="{% static 'admin/adminlte/assets/img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+           style="opacity: .8">
+      <span class="brand-text">وبلاگ </span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+            {%if user.avatar %}
+            <img src="{{ user.avatar.url }}" class="img-thumbnail elevation-2" alt="{{user.email}}">
+            {% else %}
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/67/User_Avatar.png" width=50 height=50>
+            {% endif %}
+        </div>
+        <div class="info">
+          <a href="{% url 'profile' %}" class="d-block">
+            {% if user.get_full_name %}
+              {{user.get_full_name}}
+            {% else %}
+              {{user.username}}
+            {% endif %}
+          </a>
+        </div>
+      </div>
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          {% if user.is_superuser or user.is_author %}
+<li class="nav-item has-treeview menu-open">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Dashboard
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{% url 'profile' %}" class="nav-link{% if request.resolver_match.url_name == "profile"%}
+				active{%endif%}">
+                  <i class="fa fa-list nav-icon"></i>
+                  <p>لیست مقالات</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{%url 'new_post'%}" class="nav-link{% if request.resolver_match.url_name == "new_post"%}
+				active{%endif%}">
+                  <i class="far fa-edit nav-icon"></i>
+                  <p>افزودن مقالات</p>
+                </a>
+              </li>
+
+            </ul>
+          </li>
+          {% endif %}
+          <li class="nav-item">
+                <a href="{% url 'profile_update' user.id %}" class="nav-link{% if request.resolver_match.url_name == "profile_update"%}
+				active{%endif%}">
+                  <i class="far fa-user nav-icon"></i>
+                  <p>پروفایل کاربری</p>
+                </a>
+          </li>
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>

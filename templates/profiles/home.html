@@ -1,0 +1,63 @@
+{% extends 'profiles/base.html' %}
+
+{% block title %}{% block title-meta %}
+	لیست مقالات
+{% endblock %}{% endblock %}
+
+{% block main %}
+	<div class="row">
+          <div class="col-12">
+            {% if request.user.is_authenticated %}
+              <div class="card">
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-0">
+                  <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th>عنوان مقاله</th>
+                        <th>تصویر بندانگشتی</th>
+                        <th>دسته‌بندی</th>
+                        <th>نویسنده</th>
+                        <th>خلاصه</th>
+                        <th>زمان ایجاد</th>
+                        <th>منتشر شده</th>
+                        <th>بازدید</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for article in posts %}
+                        <tr>
+                          <td>
+                          <a href="{% url "post_single" article.slug %}">
+                            {{article.title}}
+                          </a>
+                          </td>
+                          <td><img src="{{article.image.url}}" width="120" height="80"></td>
+                          <td>{{article.category}}</td>
+                          <td>{{article.author.get_full_name}}</td>
+                          <td>{{article.content|safe|striptags|truncatewords:3}}</td>
+                          <td>{{article.create_at|timesince}}</td>
+                          <td>
+                            {%if article.draft%}
+                            <button class="alert alert-warning small">خیر</button>
+                            {%else%}
+                            <button class="alert alert-success small">بلی</button>
+                            {%endif%}
+                          </td>
+                          <td>
+                            {{article.seen}}
+                          </td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
+              {% else %}
+              <h3>محتوایی برای نمایش وجود ندارد.</h3>
+              {% endif %}
+          </div>
+        </div>
+{% endblock %}

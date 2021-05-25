@@ -71,8 +71,15 @@ class PasswordResetComplete(auth_views.PasswordResetCompleteView):
 @login_required(login_url='/accounts/login/')    
 def userprofile(request):
     user = request.user.id
-    context = {'user':User.objects.get(id=user)}
-    return render(request, 'blog/profile.html', context)
+    if request.user.is_superuser:
+        posts = Post.objects.all()
+    else:
+        posts = Post.objects.filter(author_id=user)
+    context = {
+        'user':User.objects.get(id=user),
+        'posts':posts
+     }
+    return render(request, 'profiles/home.html', context)
 
 @login_required(login_url='/accounts/login/')
 def change_password(request):
@@ -94,7 +101,7 @@ def change_password(request):
 class ProfileUpdate(LoginRequiredMixin, UpdateView):
     model = User
     fields = ['full_name', "avatar"]
-    template_name = 'blog/profile_update.html'
+    template_name = 'profiles/profile.html'
     pk_url_kwarg = 'pk'
     success_url = reverse_lazy('profile')
     def form_valid(self, form):
