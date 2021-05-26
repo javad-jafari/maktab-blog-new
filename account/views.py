@@ -15,6 +15,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from blog.models import Post
+from django.core.paginator import Paginator
 
 
 User = get_user_model()
@@ -73,11 +74,25 @@ def userprofile(request):
     user = request.user.id
     if request.user.is_superuser:
         posts = Post.objects.all()
+        paginator = Paginator(posts, 2) 
+
+        page_number = request.GET.get('page')
+        print(30*'*')
+        print(page_number)
+        print(30*'*')
+        page_obj = paginator.get_page(page_number)
     else:
         posts = Post.objects.filter(author_id=user)
+        paginator = Paginator(posts, 2) 
+
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        
+        
     context = {
         'user':User.objects.get(id=user),
-        'posts':posts
+        'posts':posts,
+        'page_obj': page_obj
      }
     return render(request, 'profiles/home.html', context)
 
@@ -94,7 +109,7 @@ def change_password(request):
             messages.error(request, 'Please correct the error below.')
     else:
         form = PasswordChangeForm(request.user)
-    return render(request, 'blog/changepass.html', {
+    return render(request, 'profiles/changepass.html', {
         'form': form
     })
 

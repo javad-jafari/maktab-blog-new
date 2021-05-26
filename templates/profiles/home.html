@@ -11,7 +11,7 @@
               <div class="card">
                 <!-- /.card-header -->
                 <div class="card-body table-responsive p-0">
-                  <table class="table table-hover">
+                  <table class="table table-hover text-center">
                     <thead>
                       <tr>
                         <th>عنوان مقاله</th>
@@ -22,10 +22,11 @@
                         <th>زمان ایجاد</th>
                         <th>منتشر شده</th>
                         <th>بازدید</th>
+                        <th>وضعیت</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {% for article in posts %}
+                      {% for article in page_obj %}
                         <tr>
                           <td>
                           <a href="{% url "post_single" article.slug %}">
@@ -47,6 +48,17 @@
                           <td>
                             {{article.seen}}
                           </td>
+
+                          <td>
+                            <button class="alert alert-danger small">حذف</button>
+                            <button class="alert alert-info small">ویرایش</button>
+                            {% if  article.draft%}
+                              <button class="alert alert-success small">تغییر به منتشر شده </button>
+                            {% else %}
+                              <button class="alert alert-warning small">تغییر به پیش نویس </button>
+                            {% endif %}
+                          </td>
+                          
                         </tr>
                       {% endfor %}
                     </tbody>
@@ -60,4 +72,9 @@
               {% endif %}
           </div>
         </div>
+
+                <div class="container d-flex justify-content-center mt-5 mb-0" dir='rtl'>
+                    {% include 'component/paginate.html' with page=page_obj %}
+
+                </div>
 {% endblock %}

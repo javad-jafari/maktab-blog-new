@@ -140,6 +140,8 @@ def newpost(request):
             new_post.save()
             PostSetting.objects.create(post_id=new_post.id,comment=True ,author=True ,allow_discussion=True)
             messages.success(request, _('ok you create it !'))
+        else:
+            messages.warning(request, _('something get wrong'))
 
 
     return render(request, 'profiles/new_post_create.html', {

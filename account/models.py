@@ -38,7 +38,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True, db_index=True)
-    avatar = models.ImageField(_("avatar"), upload_to='user/avatars', blank=True, )
+    avatar = models.ImageField(_("avatar"), upload_to='user/avatars', blank=True,)
     full_name = models.CharField(_('display name'), max_length=150, default='')
     is_staff = models.BooleanField(
         _('staff status'),
@@ -57,6 +57,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['full_name']
     objects = UserManager()
+
 
     def clean(self):
         self.email = self.__class__.objects.normalize_email(self.email)
