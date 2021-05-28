@@ -75,26 +75,23 @@ def userprofile(request):
     if request.user.is_superuser:
         posts = Post.objects.all()
         paginator = Paginator(posts, 2) 
-
         page_number = request.GET.get('page')
-        print(30*'*')
-        print(page_number)
-        print(30*'*')
         page_obj = paginator.get_page(page_number)
+
     else:
         posts = Post.objects.filter(author_id=user)
-        paginator = Paginator(posts, 2) 
-
+        paginator = Paginator(posts, 2)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         
         
     context = {
         'user':User.objects.get(id=user),
-        'posts':posts,
         'page_obj': page_obj
      }
     return render(request, 'profiles/home.html', context)
+
+
 
 @login_required(login_url='/accounts/login/')
 def change_password(request):

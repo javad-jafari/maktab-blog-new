@@ -45,25 +45,31 @@
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
+            
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{% url 'profile' %}" class="nav-link{% if request.resolver_match.url_name == "profile"%}
-				active{%endif%}">
+                <a href="{% url 'profile' %}" class="nav-link
+                {% if request.resolver_match.url_name == "profile"%}active{%endif%}">
                   <i class="fa fa-list nav-icon"></i>
                   <p>لیست مقالات</p>
                 </a>
               </li>
+
               <li class="nav-item">
-                <a href="{%url 'new_post'%}" class="nav-link{% if request.resolver_match.url_name == "new_post"%}
-				active{%endif%}">
+                <a href="{%url 'new_post'%}" class="nav-link
+                {% if request.resolver_match.url_name == "new_post"%}active{%endif%}">
                   <i class="far fa-edit nav-icon"></i>
                   <p>افزودن مقالات</p>
                 </a>
               </li>
-
             </ul>
-          </li>
-          {% endif %}
+
+
+</li>
+
+
+
+
           <li class="nav-item">
                 <a href="{% url 'profile_update' user.id %}" class="nav-link{% if request.resolver_match.url_name == "profile_update"%}
 				active{%endif%}">
@@ -71,6 +77,25 @@
                   <p>پروفایل کاربری</p>
                 </a>
           </li>
+
+
+
+
+
+          <li class="nav-item">
+                <a href="{% url 'profile_update' user.id %}" class="nav-link{% if request.resolver_match.url_name == "profile_update"%}
+				active{%endif%}">
+                  <i class="fa fa-user-secret nav-icon"></i>
+                  <p>دسترسی ادمین</p>
+                </a>
+          </li>
+
+
+
+
+
+          {% endif %}
+
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
