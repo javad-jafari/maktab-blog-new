@@ -3,16 +3,15 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from django.conf import settings
 from ckeditor.fields import RichTextField
+from mptt.models import MPTTModel, TreeForeignKey
 
-
-class Category(models.Model):
+class Category(MPTTModel):
     title = models.CharField(_("Title"), max_length=50)
     slug = models.SlugField(_("Slug"), unique=True, db_index=True)
-    parent = models.ForeignKey(
-        'self', verbose_name=_("Parent"), on_delete=models.SET_NULL, null=True, blank=True,
-        related_name='children', related_query_name='children')
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
 
-    class Meta:
+    class MPTTMeta:
+        order_insertion_by = ['title']
         verbose_name = _("Category")
         verbose_name_plural = _("Categories")
 

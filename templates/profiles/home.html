@@ -36,7 +36,7 @@
                           <td><img src="{{article.image.url}}" width="120" height="80"></td>
                           <td>{{article.category}}</td>
                           <td>{{article.author.get_full_name}}</td>
-                          <td>{{article.content|safe|striptags|truncatewords:3}}</td>
+                          <td>{{article.content|safe|striptags|truncatewords:1}}</td>
                           <td>{{article.create_at|timesince}}</td>
                           <td>
                             {%if article.draft%}

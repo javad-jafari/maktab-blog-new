@@ -35,10 +35,14 @@ class SignView(LoginView):
 
 
 
+
 class RegisterView(View):
     def get(self, request):
+        print(30*'*')
+        print(request.META["HTTP_REFERER"])
+        print(30*'*')
         if request.user.is_authenticated:
-            return redirect('posts_archive')
+            return redirect('home')
         return render(request, 'registration/register.html', {'form': UserThirdRegistrationForm})
 
     def post(self, request):
@@ -47,7 +51,9 @@ class RegisterView(View):
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password'])
             user.save()
-            return redirect(reverse('login'))
+            user = authenticate(request, username=form.cleaned_data['email'], password=form.cleaned_data['password'])
+            login(request, user)
+            return redirect('profile')
 
         return render(request, 'registration/register.html', {'form': form})
 
@@ -74,16 +80,18 @@ def userprofile(request):
     user = request.user.id
     if request.user.is_superuser:
         posts = Post.objects.all()
-        paginator = Paginator(posts, 2) 
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
 
     else:
-        posts = Post.objects.filter(author_id=user)
-        paginator = Paginator(posts, 2)
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        
+        posts = Post.objects.filter(author_id=user)  
+
+    paginator = Paginator(posts, 2) 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+
+    print(25*'*')
+    print(request.user.id)
+    print(25*'*')
         
     context = {
         'user':User.objects.get(id=user),

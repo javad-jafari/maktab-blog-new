@@ -1,5 +1,7 @@
 {% extends 'base/base.html' %}
 {% load static %}
+{% load mptt_tags %}
+
 {% block title %}
     Categories
 {% endblock %}
@@ -36,6 +38,27 @@
 
 
     </div>
+
+
+
+
+
+    <div class="container col-lg-10 col-md-6 col-sm-6 bg-info" id="categories-back">
+
+<ul class="container">
+    {% recursetree categories %}
+        <li >
+            {{ node.title }}
+            {% if not node.is_leaf_node %}
+                <ul class="children d-flex justify-content-end">
+                    {{ children }}
+                </ul>
+            {% endif %}
+        </li>
+    {% endrecursetree %}
+</ul>
+</div>
+
 
 
 {% endblock %}

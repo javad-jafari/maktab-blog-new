@@ -15,7 +15,7 @@ urlpatterns = [
 	path('confirm/done/', PasswordResetComplete.as_view(), name='password_reset_complete'),
 	path('profile/',userprofile , name='profile'),
 	path('password/', change_password, name='change_password'),
-	path('profile/update/<int:pk>/',ProfileUpdate.as_view() , name='profile_update'),
+	path('profile/update/<uuid:pk>/',ProfileUpdate.as_view() , name='profile_update'),
 
 
 

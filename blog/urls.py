@@ -28,7 +28,7 @@ urlpatterns = [
     path('searchbar/', SearchResultsView.as_view(), name='searchbar'),
     path('comments/', create_comment, name='add_comment'),
     path('posts/create/v1/', newpost, name='new_post'),
-    path('posts/bloger/<int:pk>', BlogerPostView.as_view(), name='bloger_post'),
+    path('posts/bloger/<uuid:pk>', BlogerPostView.as_view(), name='bloger_post'),
 
 
 

@@ -5,8 +5,7 @@ from django.core.mail import send_mail
 from django.db import models
 from django.contrib.auth.models import PermissionsMixin
 from django.utils.translation import ugettext_lazy as _
-
-
+import uuid
 # Create your models here.
 
 class UserManager(BaseUserManager):
@@ -37,6 +36,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(_('email address'), unique=True, db_index=True)
     avatar = models.ImageField(_("avatar"), upload_to='user/avatars', blank=True,)
     full_name = models.CharField(_('display name'), max_length=150, default='')
