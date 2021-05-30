@@ -40,6 +40,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(_('email address'), unique=True, db_index=True)
     avatar = models.ImageField(_("avatar"), upload_to='user/avatars', blank=True,)
     full_name = models.CharField(_('display name'), max_length=150, default='')
+    is_author = models.BooleanField(_('bloger'),default=False)
+
     is_staff = models.BooleanField(
         _('staff status'),
         default=False,

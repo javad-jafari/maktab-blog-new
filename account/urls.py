@@ -1,5 +1,5 @@
 from django.urls import path, re_path
-from .views import LogoutView, RegisterView,SignView,userprofile,change_password,ProfileUpdate
+from .views import LogoutView, RegisterView,SignView,userprofile,change_password,ProfileUpdate,admin_all_users
 from .views import UserPassReset,PasswordResetComplete,PasswordResetConfirm,PasswordResetDone
 
 
@@ -16,6 +16,8 @@ urlpatterns = [
 	path('profile/',userprofile , name='profile'),
 	path('password/', change_password, name='change_password'),
 	path('profile/update/<uuid:pk>/',ProfileUpdate.as_view() , name='profile_update'),
+	path('siteadmin/',admin_all_users , name='admin_users'),
+
 
 
 

@@ -2,6 +2,7 @@ from django.contrib.auth import logout, authenticate, login, get_user_model,upda
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import ValidationError
+from django.http.response import Http404
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import PasswordChangeForm
 # Create your views here.
@@ -87,17 +88,34 @@ def userprofile(request):
     paginator = Paginator(posts, 2) 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    
 
-    print(25*'*')
-    print(request.user.id)
-    print(25*'*')
         
     context = {
         'user':User.objects.get(id=user),
         'page_obj': page_obj
      }
     return render(request, 'profiles/home.html', context)
+
+
+@login_required(login_url='/accounts/login/') 
+def admin_all_users(request):
+    user = request.user.id
+    if request.user.is_superuser:
+        users = User.objects.all()
+
+    else:
+        users = '' 
+
+    paginator = Paginator(users, 2) 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+        
+    context = {
+        'user':User.objects.get(id=user),
+        'page_obj': page_obj
+     }
+    return render(request, 'admin/all_users.html', context)   
 
 
 
@@ -129,4 +147,3 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-    

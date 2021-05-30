@@ -27,7 +27,7 @@ class UserAdmin(BaseUserAdmin):
             "fields": ('full_name', 'avatar')
         }),
         (_('Permissions'), {
-            "fields": ('is_staff', 'is_active', 'is_superuser', 'groups', 'user_permissions')
+            "fields": ('is_author','is_staff', 'is_active', 'is_superuser', 'groups', 'user_permissions')
         }),
         (_('Important dates'), {
             "fields": ('last_login',)
