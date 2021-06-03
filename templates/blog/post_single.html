@@ -1,132 +1,157 @@
-{% extends 'base/base.html' %}
+{% extends 'blog/index_base.html' %}
+
 
 {% load static %}
 {% block title %}
-    zoomit/{{ post.slug }}
+    {{ post.slug }}
 {% endblock %}
-{% block body %}
+{% block main %}
     <!-- Page Content -->
-    <div class="container text-light">
+    <div class="blog-item">
+      <hr class="offset-lg visible-xs">
+      <hr class="offset-lg visible-xs">
 
+      <img src="{{post.image.url}}" alt="Apple 3D Touch" class="hidden-xs" />
+    	<img src="{{post.image.url}}" alt="Apple 3D Touch" class="visible-xs" />
+
+      <div class="white">
+        <hr class="offset-md">
+        <div class="container">
+  	    	<div class="row">
+  	    		<div class="col-sm-8 col-sm-offset-2">
+  	    			<h1>{{post.title}}</h1>
+                    {{post.content|safe}}
+
+  		    		 <button class="btn btn-success btn-sm whatsapp"> <i class="ion-social-whatsapp"></i> Share </button>
+  		    		 <button class="btn btn-info btn-sm whatsapp"> <i class="ion-social-twitter"></i> Retweet</button>
+  		    		 <button class="btn btn-danger btn-sm whatsapp"> <i class="ion-social-googleplus"></i> Plus </button>
+  	    		</div>
+  	    	</div>
+      	</div>
+        <hr class="offset-lg">
+        <hr class="offset-lg">
+      </div>
+    <hr class="offset-md">
+
+    <hr class="offset-md">
+
+    <!-- comment -->
+
+
+      <div class="container">
         <div class="row">
-
-            <!-- Post Content Column -->
-            <div class="col-lg-8">
-
-                <!-- Title -->
-                <h1 class="mt-5 text-right">{{ post.title }}</h1>
-
-
-                <!-- Author -->
-
-
-                <hr class="bg-light">
-
-                <!-- Date/Time -->
-                {% if settings.author %}
-                    <a href="{% url 'bloger_post' post.author.id %}" class="border border-1 btn btn-outline-info btn-sm ">
-                       
-                     <i class="fa fa-lg fa-user-circle" aria-hidden="true"></i> {{ post.author.full_name }}</a>
-                            
-                           {% if post.author.avatar %}
-                            <img class="d-flex mr-3 rounded-circle" src="{{post.author.avatar.url}}" id="cm-img" alt="">
-                            {% else %}
-                        <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-                            {% endif %}
-                {% endif %}
-         
+          <div class="col-sm-8 col-sm-offset-2">
+            <div class="comments">
+              <h2 class="h3">نظرات مقاله</h2>
+              <hr class="offset-sm">
+              {% if request.user.is_authenticated %}
+              <button class="btn btn-default" data-toggle="modal" data-target="#Modal-Comment"> <i class="ion-android-textsms"></i> Add comment </button>
+              {% else %}
+              <a href="{% url 'login' %}">
+              <button class="btn btn-default"> <i class="ion-android-textsms"></i> برای ثبت نظر ابتدا وارد شوید </button>
+              </a>
+              {% endif %}
+              <hr class="offset-md">
 
 
-                <hr class="bg-light">
+            <div class="adds">
+            {% for comment in comments %}
+            <div>
+              <h3>{{comment.author}}</h3>
+              <label>{{comment.create_at}}</label>
+              <p>
+                {{comment.content }}
+              </p>
 
-                <!-- Preview Image -->
-                <img class="img-fluid rounded" src="{{ post.image.url }}" alt="img-background" id="content-img">
+              <p>
 
-                <hr class="bg-light">
-
-                <!-- Post Content -->
-                <p class="card-text">
-                    {{ post.content|safe }}
-                </p>
-                <hr class="bg-light">
-                       <p class="text-right">
-
-                <p> {{ post.publish_time|date:"D d M Y" }} :تاریخ انتشار</p>
-                <p>
-                  دسته بندی
-                  :
-                  <a href=""> {{ post.category.title }} </a>
-                    
-                  
-
-                </p>
-                </p>
-                <hr class="bg-light">
-
-                {% if settings.allow_discussion %}
-                    {% if settings.comment %}
-                    {% if request.user.is_authenticated %}
-                        <!-- Comments Form -->
-
-                        <form class='form-inline m-5' id="comment_form" >
-                            {% csrf_token %}
-                            {% include 'component/commentform.html' %}
-
-                            <input type="submit" value="ثبت نظر" class="btn btn-outline-info p-5">
-                        </form>
-                    
-                    {% else %}
-                    <div class="col-lg-12 col-sm-6">
-                    <textarea class="form-control" rows="5" cols="50" readonly>برای ثبت نظر وارد شوید</textarea>
-                        </div>
-                    {% endif %}
-                    {% endif %}
-                    <hr class='bg-light m-5'>
-
-
-                    
-                    <!-- Single Comment -->
-                    <div class='container adds' id="comment-bg">
-                    {% for comment in comments %}
-                        <hr class="bg-danger ">
-                        <div class="media mb-4 bg-secondary rounded" id="bg">
-                        {% if comment.author.avatar%}
-                            <img class="d-flex mr-3 rounded-circle" src="{{comment.author.avatar.url}}" id="cm-img" alt="">
-                        {% else %}
-                        <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-                        {%endif%}
-                            <div class="media-body">
-                                <h5 class="mt-0 border-bottom">  {{ comment.author.full_name }}  </h5>
-                                <p> {{ comment.content }}</p>
-                            </div>
-                        </div>
-                        <div>
-                            like:<span id='like_counter{{ comment.id }}'>{{ comment.like_count }}</span>
-                            dislike:<span id='dislike_counter{{ comment.id }}'>{{ comment.dislike_count }}</span>
-                        </div>
-                        <div class="mb-5">
-                            <i class="fa fa-thumbs-o-up text-success" aria-hidden="true"
-                               onclick="likeComment({{ comment.id }})"></i>
-                            <i class="fa fa-thumbs-o-down text-danger" aria-hidden="true"
-                               onclick="likeComment({{ comment.id }},false)"></i>
-                        </div>
-                    {% endfor %}
-                    <div>
-                    
-                    
-                {% endif %}
-
-
+                <div>
+                    like:<span id='like_counter{{comment.id}}'>{{comment.like_count}}</span>
+                    dislike:<span id='dislike_counter{{comment.id}}'>{{comment.dislike_count}}</span>
                 </div>
 
-                </div>
+              <i class="ion-close text-success" aria-hidden="true" 
+              onclick="likeComment({{comment.id}})"></i>
+                <i class="ion-close text-danger" aria-hidden="true"
+              onclick="likeComment({{comment.id}},false)"></i>
+              </p>
             </div>
 
-        </div>
-        <!-- /.row -->
+            {% endfor %}
 
+            </div>
+
+            
+
+
+              <nav>
+                <ul class="pagination">
+                  <li>
+                    <a href="#" aria-label="Previous">
+                      <span aria-hidden="true"><i class="ion-ios-arrow-left"></i></span>
+                    </a>
+                  </li>
+                  <li class="active"><a href="#">1</a></li>
+                  <li><a href="#">2</a></li>
+                  <li>
+                    <a href="#" aria-label="Next">
+                      <span aria-hidden="true"><i class="ion-ios-arrow-right"></i></span>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- /.container -->
+
+    <!-- end comment -->
+
+
+
+    <!-- comment modal -->
+
+    <div class="modal fade" id="Modal-Comment" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header align-center">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="ion-android-close"></i></span></button>
+            <h1 class="h4 modal-title">Add your comment</h1>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+            <form class="join"  method="post" id="comment_form">
+              <div class="row">
+                <div class="col-sm-12">
+                       
+                    {% csrf_token %}
+                    {% include 'component/commentform.html' %}
+
+                    <div class="col-sm-12">
+                        <div class="align-right">
+                            <hr class="offset-md">
+                            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal"> <i class="ion-android-share"></i> منصرف شدم </button>
+                            <button type="submit" class="btn btn-primary btn-sm"> <i class="ion-android-send"></i> ثبت کن</button>
+                            <hr class="offset-md">
+                        </div>
+                    </div>
+                        
+                </div>
+
+
+
+              </div>
+             </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end comm modal -->
+
+
 
 
 {% endblock %}
@@ -162,40 +187,37 @@
         document.getElementById("comment_form").addEventListener("submit", function (event) {
             event.preventDefault();
             const content = $('#id_content').val()
-            const data = JSON.stringify({content, post_id:{{post.id}}})
-            $.ajax({
+            const data = JSON.stringify({ content , post_id:{{post.id}} })
+
+
+            request= $.ajax({
                 type: "post",
                 url: "{% url 'add_comment' %}",
                 data: data,
-                success: function (response) {
-                    console.log(response)
-                    const data = JSON.parse(response)
-                    console.log(data)
-                    const result = `
-                    <hr class="bg-danger ">
-                        <div class="media mb-4 bg-secondary rounded" id="bg">
-
-                            <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt="">
-                            <div class="media-body">
-                                <h5 class="mt-0 border-bottom">  ${ data.full_name }  </h5>
-                                <p> ${ data.content }</p>
-                            </div>
-                        </div>
-                        <div>
-                            like:<span id='like_counter${ data.comment_id }'>${data.like_count}</span>
-                            dislike:<span id='dislike_counter${data.comment_id}'>${data.dislike_count}</span>
-                        </div>
-                        <div class="mb-5">
-                            <i class="fa fa-thumbs-o-up text-success" aria-hidden="true"
-                               onclick="likeComment(${data.comment_id })"></i>
-                            <i class="fa fa-thumbs-o-down text-danger" aria-hidden="true"
-                               onclick="likeComment(${data.comment_id},false)"></i>
-                        </div>`
-                    $( ".adds" ).prepend( result );
-                }
+            
             });
+
+            request.done(function( msg ) {
+                
+
+                Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'دیدگاه شما ثبت شد بعد از بررسی ثبت می شود!',
+                showConfirmButton: false,
+                timer: 2500
+                })
+            });
+
+
+            request.fail(function( jqXHR, textStatus ) {
+            alert( "Request failed: " + textStatus );
+            });
+
         }, false);
     </script>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 {% endblock %}
 
 

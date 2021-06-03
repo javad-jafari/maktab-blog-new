@@ -90,7 +90,7 @@ class Comment(models.Model):
     update_at = models.DateTimeField(_("Update at"), auto_now=True)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_(
         "Author"), on_delete=models.CASCADE)
-    is_confirmed = models.BooleanField(_("confirm"), default=True)
+    is_confirmed = models.BooleanField(_("confirm"), default=False)
 
     class Meta:
         verbose_name = _("Comment")

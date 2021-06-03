@@ -1,10 +1,10 @@
-{% extends 'base/base.html' %}
+{% extends 'blog/index_base.html' %}
 {% load static %}
 {% block title %}
-    post_archive_class
+    پست ها با دسته بندی
 {% endblock %}
 
-{% block body %}
+{% block main %}
 
 
 
@@ -41,9 +41,6 @@
 </div>
 {% endif %}
 
-<div class="container">
 
-<a class="btn btn-outline-info" href="{% url 'categories_archive' %}"> >> برگشت به دسته بندي</a>
-</div>
 
 {% endblock %}

@@ -1,6 +1,6 @@
 from django.urls import path, re_path, include
 from .views import like_comment, SingleCategory, SinglePost, search_view, SearchResultsView,newpost
-from .views import HomeView, AboutView, CategoresArchiveView, create_comment,BlogerPostView
+from .views import HomeView, AboutView, create_comment,BlogerPostView
 from .api import CommentViewModel
 # from .api import post_list, post_detail,comment_list, comment_detail
 # from .api import PostView, PostDetailView
@@ -20,7 +20,6 @@ urlpatterns = [
 
     path('', HomeView.as_view(), name='home'),
     path('posts/<slug:pk>/', SinglePost.as_view(), name='post_single'),
-    path('categories/', CategoresArchiveView.as_view(), name='categories_archive'),
     path('categories/<slug:pk>/', SingleCategory.as_view(), name='category_single'),
     path('about_us/', AboutView.as_view(), name='about'),
     path('like_comment/', like_comment, name='like_comment'),

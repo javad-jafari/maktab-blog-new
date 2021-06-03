@@ -1,0 +1,51 @@
+   {% extends 'blog/index_base.html' %}
+
+   {% load static %}
+   
+   {% block main %}
+
+
+
+    <div class="blog">
+      <div class="container">
+        <div class="row">
+
+
+
+            {% for post in posts %}
+          <div class="col-sm-6 col-md-6 item">
+            <div class="body">
+              <a href="{% url 'post_single' post.slug %}" class="view"><i class="ion-ios-book-outline"></i></a>
+              <a href="{% url 'post_single' post.slug %}">
+                <img src="{{post.image.url}}" title={{post.title}} alt={{post.title}} style='height:250px'>
+              </a>
+
+              <div class="caption">
+                <h1 class="h3">{{post.title}}</h1>
+                <label> {{post.create_at|timesince}}</label>
+                <hr class="offset-sm">
+
+                <p>
+                {{post.content|safe|striptags|truncatewords:15}}
+                </p>
+                <hr class="offset-sm">
+
+                <a href="{% url 'post_single' post.slug %}"> مشاهده  <i class="ion-ios-arrow-right"></i> </a>
+              </div>
+            </div>
+          </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% include 'component/paginate.html' with page=page_obj %}
+
+
+      </div>
+    </div>
+
+    <hr class="offset-lg">
+    <hr class="offset-sm">
+
+    {% endblock  %}

@@ -24,9 +24,13 @@ User = get_user_model()
 
 class HomeView(ListView):
     paginate_by = 6
-    template_name = 'blog/posts.html'
+    template_name = 'blog/index.html'
     queryset = Post.objects.filter(draft=False)
     context_object_name = 'posts'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['categories'] = Category.objects.all()
+        return context
    
 
 
@@ -52,15 +56,18 @@ def like_comment(request):
 @csrf_exempt
 def create_comment(request):
     data = json.loads(request.body)
+
     user = request.user
     try:
         comment = Comment.objects.create(post_id=data['post_id'], content=data['content'], author=user)
         result = {"comment_id": comment.id, "content": comment.content, 'dislike_count': 0, 'like_count': 0,
                   'full_name': user.get_full_name()}
+    
+        
         return HttpResponse(json.dumps(result), status=201)
     except:
         result = {"error": 'error'}
-        return HttpResponse(json.dumps(result), status=400)
+        return HttpResponse(json.dumps(result), status=401)
 
 
 class SinglePost(DetailView):
@@ -76,7 +83,7 @@ class SinglePost(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         post = context['post']
-        context['comments'] = post.comments.filter(post__slug = self.kwargs.get('pk'))
+        context['comments'] = post.comments.filter(post__slug = self.kwargs.get('pk'),is_confirmed=True)
         context['settings'] = PostSetting.objects.get(post__slug = self.kwargs.get('pk'))
         context['form'] = CommentForm()
         return context
@@ -94,10 +101,6 @@ class SingleCategory(ListView):
         return posts
 
 
-class CategoresArchiveView(ListView):
-    context_object_name = 'categories'
-    queryset = Category.objects.all()
-    template_name = 'blog/categories.html'
 
 
 class AboutView(TemplateView):

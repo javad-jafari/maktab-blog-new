@@ -1,0 +1,207 @@
+{% load static %}
+{% load mptt_tags %}
+
+<!DOCTYPE html>
+<html lang="en" >
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title> Blog &middot; Unistore Pro &middot; Premium Responsive E-Commerce Template </title>
+
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="Sunrise.Digital">
+
+    <link href='http://www.fontonline.ir/css/BYekan.css' rel='stylesheet' type='text/css'>
+
+
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.png">
+
+    <!-- Bootstrap -->
+    
+    <link href="{%static 'css/style.css' %}" rel="stylesheet">
+    <link href="{%static 'index/css/bootstrap.css' %}" rel="stylesheet">
+    <link href="{%static 'index/css/custom.css'%}" rel="stylesheet">
+    <link href="{%static 'index/ionicons-2.0.1/css/ionicons.css'%}" rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link href='https://fonts.googleapis.com/css?family=Catamaran:400,100,300' rel='stylesheet' type='text/css'>
+    <link href='http://www.fontonline.ir/css/BYekan.css' rel='stylesheet' type='text/css'>
+
+    <link href="{%static 'index/css/custom-scroll/jquery.mCustomScrollbar.css'%}" rel="stylesheet" >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+
+
+{% if request.user.is_authenticated %}
+
+    <div class="toplinks">
+      <a href="{% url 'profile'%}" > <i class="ion-profile"></i>خوش آمدید {{request.user}}</a>
+      <a href="{% url 'logout' %}" > <i class="ion-close"></i> خروج</a>
+    </div>
+{% else %}
+
+    <div class="toplinks">
+      <a href="{% url 'register' %}" > <i class="ion-person"></i> ثبت نام</a>
+      <a href="{% url 'login' %}" > <i class="ion-unlocked"></i> ورود</a>
+    </div>
+
+{% endif %}
+
+    
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Brand</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="{% if request.resolver_match.url_name == "home"%}active{%endif%}"><a href="{% url 'home' %}">خانه <span class="sr-only">(current)</span></a></li>
+        <li class="{% if request.resolver_match.url_name == "about"%}active{%endif%}"><a href="{%url 'about' %}">در باره ما </a></li>
+        <li><a href="#">سرویس های ما</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button">دسته بندی<span class="caret"></span></a>
+            <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+		      
+		              	{% for cat in  categories %}
+                    {% if  not cat.parent %}
+
+                      <li class="dropdown-submenu">
+                        <a href="{%url 'category_single' cat.slug %}" >{{cat.title}}</a>
+                        {% if cat.children %}
+                          {% include 'component/cat_submenu.html' %}
+                        {% endif %}
+                      </li>
+                
+                    {% endif %}
+
+                    {% endfor %}
+            	</ul>
+                
+        </li>		              	    
+                
+
+      </ul>
+
+
+      <div >
+        <div class="input">
+          <form action="{% url 'searchbar' %}" method="get" class="form-inline">
+            <button type="submit"><i class="ion-ios-search"></i></button>
+
+            <input class="form-control " type="search" name="search" value="" placeholder="Type here..." />
+          </form>
+      </div>
+      </div>
+
+    </div><!-- /.navbar-collapse -->
+
+  </div><!-- /.container-fluid -->
+
+
+</nav>
+
+
+
+
+
+
+          </div><!--/.nav-collapse -->
+
+
+        </div><!--/.container-fluid -->
+    </nav>
+
+
+
+    <hr class="offset-md">
+
+    {% block main %}{% endblock  %}
+
+    <hr class="offset-lg">
+    <hr class="offset-sm">
+    <footer>
+
+
+      <div class="subscribe">
+        <div class="container align-center">
+            <hr class="offset-md">
+
+            <h1 class="h3 upp">Join our newsletter</h1>
+            <p>Get more information and receive special discounts for our products.</p>
+            <hr class="offset-sm">
+
+            <form action="index.php" method="post">
+              <div class="input-group">
+                <input type="email" name="email" value="" placeholder="E-mail" required="" class="form-control">
+                <span class="input-group-btn">
+                  <button type="submit" class="btn btn-primary"> Subscribe <i class="ion-android-send"></i> </button>
+                </span>
+              </div><!-- /input-group -->
+            </form>
+            <hr class="offset-lg">
+            <hr class="offset-md">
+
+            <div class="social">
+              src="#"><i class="ion-social-facebook"></i></a>
+              <a href="#"><i class="ion-social-twitter"></i></a>
+              <a href="#"><i class="ion-social-googleplus-outline"></i></a>
+              <a href="#"><i class="ion-social-instagram-outline"></i></a>
+              <a href="#"><i class="ion-social-linkedin-outline"></i></a>
+              <a href="#"><i class="ion-social-youtube-outline"></i></a>
+            </div>
+
+
+            <hr class="offset-md">
+            <hr class="offset-md">
+        </div>
+      </div>
+
+
+      
+
+      
+
+
+    </footer>
+
+
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="{% static 'index/js/jquery-latest.min.js' %}"></script>
+
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{% static 'js/myjs.js' %}"></script>
+
+    <script src="{% static 'index/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'index/js/core.js'%}"></script>
+    <script src="{% static 'index/js/store.js'%}"></script>
+
+    <script type="text/javascript" src="{% static 'index/js/custom-scroll/jquery.mCustomScrollbar.concat.min.js'%}"></script>
+
+    <script type="text/javascript" src="{% static 'index/js/jquery-ui-1.11.4.js'%}"></script>
+    <script type="text/javascript" src="{% static 'index/js/jquery.ui.touch-punch.js'%}"></script>
+{% block javascript %}{% endblock %}
+
+
+  </body>
+</html>

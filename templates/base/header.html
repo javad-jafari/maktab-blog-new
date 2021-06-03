@@ -11,15 +11,7 @@
               <span class="sr-only">(current)</span>
             </a>
           </li>
-          <li class="nav-item ">
-            <a class="nav-link" href="{% url 'about' %}">درباره ما</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">سرویس ها</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'categories_archive' %}">دسته بندی</a>
-          </li>
+
            <li class="nav-item">
                 {% if request.user.is_authenticated %}
                 <div class="btn-group " role="group" aria-label="Basic example">
