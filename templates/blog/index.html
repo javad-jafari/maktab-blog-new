@@ -7,10 +7,40 @@
 
 
     <div class="blog">
-      <div class="container">
+
+
+
+        <div class="container">
         <div class="row">
 
+        <div class="col-sm-3 col-md-6 item">
+          {% for p in promote %}
 
+            <div class="col-sm-3 col-md-6 item">
+
+              <img src="{{p.image.url}}" alt="Apple 3D Touch" style='height:150px' class="hidden-xs" />
+
+            </div>
+           {% endfor %}
+          </div>
+
+          <div class="col-sm-3 col-md-6 item">
+
+            <div class="col-sm-3 col-md-12 item">
+
+              <img src="{{promote1.image.url}}" alt="Apple 3D Touch"  class="hidden-xs" />
+
+            </div>
+          </div>
+
+
+        </div>
+        </div>
+
+
+
+      <div class="container">
+        <div class="row">
 
             {% for post in posts %}
           <div class="col-sm-6 col-md-6 item">
@@ -38,6 +68,81 @@
             {% endfor %}
 
         </div>
+
+
+        {% comment %} advertisments {% endcomment %}
+
+
+      <div class="container">
+        <div class="row">
+
+        <div class="col-sm-3 col-md-6 item">
+
+
+            <div class="col-sm-3 col-md-6 item">
+
+              <img src="{{promote1.image.url}}" alt="Apple 3D Touch" style='height:150px' class="hidden-xs" />
+
+            </div>
+
+            <div class="col-sm-3 col-md-6 item">
+
+              <img src="{{promote1.image.url}}" alt="Apple 3D Touch" style='height:150px' class="hidden-xs" />
+
+            </div> 
+            
+            <div class="col-sm-3 col-md-6 item">
+
+              <img src="{{promote1.image.url}}" alt="Apple 3D Touch" style='height:150px' class="hidden-xs" />
+
+            </div> 
+
+             <div class="col-sm-3 col-md-6 item">
+
+              <img src="{{promote1.image.url}}" alt="Apple 3D Touch" style='height:150px' class="hidden-xs" />
+
+            </div>
+
+
+ 
+          </div>
+
+
+
+          <div class="col-sm-3 col-md-6 item">
+
+             <div class="col-sm-3 col-md-6 item">
+
+              <img src="{{promote1.image.url}}" alt="Apple 3D Touch" style='height:150px' class="hidden-xs" />
+
+            </div>
+
+            <div class="col-sm-3 col-md-6 item">
+
+              <img src="{{promote1.image.url}}" alt="Apple 3D Touch" style='height:150px' class="hidden-xs" />
+
+            </div>
+
+            <div class="col-sm-3 col-md-6 item">
+
+              <img src="{{promote1.image.url}}" alt="Apple 3D Touch" style='height:150px' class="hidden-xs" />
+
+            </div>
+
+            <div class="col-sm-3 col-md-6 item">
+
+              <img src="{{promote1.image.url}}" alt="Apple 3D Touch" style='height:150px' class="hidden-xs" />
+
+            </div>
+
+          </div>
+
+
+        </div>
+        </div>
+
+        {% comment %} end {% endcomment %}
+
 
         {% include 'component/paginate.html' with page=page_obj %}
 

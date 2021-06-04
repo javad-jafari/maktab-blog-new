@@ -18,6 +18,8 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required,permission_required
 from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
+from django.core.paginator import Paginator
+
 
 User = get_user_model()
 
@@ -30,6 +32,10 @@ class HomeView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
+        context['promote'] = Post.objects.all()[:4]
+        context['promote1'] = Post.objects.all()[3]
+
+
         return context
    
 
@@ -161,7 +167,7 @@ def newpost(request):
 
 
 class BlogerPostView(DetailView):
-    paginate_by = 1
+
     template_name = "blog/bloger_posts.html"
 
     def get_queryset(self) :
@@ -169,8 +175,13 @@ class BlogerPostView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["posts"] = Post.objects.filter(author__id=self.kwargs.get('pk'))
+        bloger_posts = Post.objects.filter(author__id=self.kwargs.get('pk'))
+        paginator = Paginator(bloger_posts, 6) 
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
         context["author"] = User.objects.get(id=self.kwargs.get('pk'))
+        context["posts"] = page_obj
         return context
     
 

@@ -8,11 +8,10 @@
 {% block main %}
     <!-- Page Content -->
     <div class="blog-item">
-      <hr class="offset-lg visible-xs">
-      <hr class="offset-lg visible-xs">
 
-      <img src="{{post.image.url}}" alt="Apple 3D Touch" class="hidden-xs" />
-    	<img src="{{post.image.url}}" alt="Apple 3D Touch" class="visible-xs" />
+
+      <img src="{{post.image.url}}" alt={{post.title}} class="hidden-xs" style="height:600px;opacity: 0.7;" />
+    	<img src="{{post.image.url}}" alt={{post.title}} class="visible-xs" style="height:200px;opacity: 0.7;" />
 
       <div class="white">
         <hr class="offset-md">
@@ -20,12 +19,17 @@
   	    	<div class="row">
   	    		<div class="col-sm-8 col-sm-offset-2">
   	    			<h1>{{post.title}}</h1>
-                    {{post.content|safe}}
+              {{post.content|safe}}
 
   		    		 <button class="btn btn-success btn-sm whatsapp"> <i class="ion-social-whatsapp"></i> Share </button>
   		    		 <button class="btn btn-info btn-sm whatsapp"> <i class="ion-social-twitter"></i> Retweet</button>
   		    		 <button class="btn btn-danger btn-sm whatsapp"> <i class="ion-social-googleplus"></i> Plus </button>
-  	    		</div>
+  	    		<p style="padding:35px">
+            دسته بندی:<a href='' style="margin-right:50px" > {{post.category}}</a>
+            تاریخ انتشار:<a href='#' style="margin-right:50px" > {{post.create_at}}</a>
+            نویسنده:<a href="{% url 'bloger_post' post.author.id %}" style="margin-right:50px" > {{post.author}}</a>
+            </p>
+            </div>
   	    	</div>
       	</div>
         <hr class="offset-lg">
@@ -118,7 +122,7 @@
         <div class="modal-content">
           <div class="modal-header align-center">
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="ion-android-close"></i></span></button>
-            <h1 class="h4 modal-title">Add your comment</h1>
+            <h1 class="h4 modal-title">ثبت نظر</h1>
           </div>
           <div class="modal-body">
             <div class="container-fluid">
@@ -132,8 +136,8 @@
                     <div class="col-sm-12">
                         <div class="align-right">
                             <hr class="offset-md">
-                            <button type="button" class="btn btn-primary btn-sm" data-dismiss="modal"> <i class="ion-android-share"></i> منصرف شدم </button>
-                            <button type="submit" class="btn btn-primary btn-sm"> <i class="ion-android-send"></i> ثبت کن</button>
+                            <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"> <i class="ion-android-share"></i> منصرف شدم </button>
+                            <button type="submit" class="btn btn-success btn-sm"> <i class="ion-android-send"></i> ثبت کن</button>
                             <hr class="offset-md">
                         </div>
                     </div>

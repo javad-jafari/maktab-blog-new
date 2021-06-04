@@ -10,7 +10,7 @@
 
 
 
- <div class="bg-light p-5 m-5 rounded" dir='rtl'>
+ <div style='padding:25px' dir='rtl'>
  <div class="row">
                 <ul style='list-style-type:none'>
                     {% if user.avatar %}
@@ -29,7 +29,7 @@
                 </ul>
                 <ul style='list-style-type:none' class='mt-5'>
                         <li><h2>
-                        صفحه پست هاي بلاگر 
+                        پست های مرتبط با 
                             {{author.full_name}}
                         </h2></li>
                    
@@ -52,7 +52,7 @@
 <div class="container mx-5">
   <div class="row">
     {% for post in posts %}
-        <div class="col-lg-4 col-md-6 mb-4 mx-5">
+        <div class="col-lg-4 col-md-6 mb-4 mx-5" style="margin-bottom:20px">
             <div class="card h-100">
                 <img class="card-img-top" id="img-posts" src="{{ post.image.url }}" alt="">
                 <div class="card-body">
@@ -72,13 +72,44 @@
     </div>
 </div>
 
-
- <div class="container text-center d-flex justify-content-center m-5">
-                    {% include 'component/paginate.html' with page=page_obj %}
-
-                </div>
+    <!-- pagination -->
 
 
+        <nav>
+
+          <ul class="pagination">
+            {% if posts.has_previous %}
+            <li>
+              <a href="#" aria-label="Previous">
+                <span aria-hidden="true"><i class="ion-ios-arrow-left"></i></span>
+              </a>
+            </li>
+            {% endif %}
+
+        {% for i in posts.paginator.page_range %}
+            {% if posts.number == i %}
+                <li class="page-item active"><a class="page-link" href="?page={{ i }}">
+                    {{ i }}
+                </a></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{ i }}">
+                    {{ i }}
+                </a></li>
+
+            {% endif %}
+        {% endfor %}
+
+        {% if posts.has_next %}
+            <li>
+              <a href="#" aria-label="Next">
+                <span aria-hidden="true"><i class="ion-ios-arrow-right"></i></span>
+              </a>
+            </li>
+        {% endif %}
+
+          </ul>
+        </nav>
+    <!-- end pagination -->
 
 
 
