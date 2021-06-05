@@ -74,41 +74,8 @@
 
     <!-- pagination -->
 
+        {% include 'component/paginate.html' with page_obj=posts %}
 
-        <nav>
-
-          <ul class="pagination">
-            {% if posts.has_previous %}
-            <li>
-              <a href="#" aria-label="Previous">
-                <span aria-hidden="true"><i class="ion-ios-arrow-left"></i></span>
-              </a>
-            </li>
-            {% endif %}
-
-        {% for i in posts.paginator.page_range %}
-            {% if posts.number == i %}
-                <li class="page-item active"><a class="page-link" href="?page={{ i }}">
-                    {{ i }}
-                </a></li>
-            {% else %}
-                <li class="page-item"><a class="page-link" href="?page={{ i }}">
-                    {{ i }}
-                </a></li>
-
-            {% endif %}
-        {% endfor %}
-
-        {% if posts.has_next %}
-            <li>
-              <a href="#" aria-label="Next">
-                <span aria-hidden="true"><i class="ion-ios-arrow-right"></i></span>
-              </a>
-            </li>
-        {% endif %}
-
-          </ul>
-        </nav>
     <!-- end pagination -->
 
 

@@ -1,6 +1,7 @@
 # from django.db.models.query_utils import Q
 from django.conf import settings
 from django.db.models import Q
+from django.db.models.fields import related
 from blog.models import Post
 from blog.models import Comment
 from django.http import HttpResponse, request
@@ -25,13 +26,12 @@ User = get_user_model()
 
 
 class HomeView(ListView):
-    paginate_by = 6
+    paginate_by = 1
     template_name = 'blog/index.html'
     queryset = Post.objects.filter(draft=False)
     context_object_name = 'posts'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['categories'] = Category.objects.all()
         context['promote'] = Post.objects.all()[:4]
         context['promote1'] = Post.objects.all()[3]
 
@@ -89,7 +89,11 @@ class SinglePost(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         post = context['post']
-        context['comments'] = post.comments.filter(post__slug = self.kwargs.get('pk'),is_confirmed=True)
+        related_comment = post.comments.filter(post__slug = self.kwargs.get('pk'),is_confirmed=True)
+        paginator = Paginator(related_comment, 6) 
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context['comments'] = page_obj
         context['settings'] = PostSetting.objects.get(post__slug = self.kwargs.get('pk'))
         context['form'] = CommentForm()
         return context

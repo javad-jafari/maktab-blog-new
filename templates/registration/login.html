@@ -11,6 +11,9 @@
         </div>
     </div>
 
+
+    <div class='container d-flex justify-content-center p-5 col-6 '>
+
            {% if form.non_field_errors %}
                 <ul class='form-errors d-flex align-items-center justify-content-center'>
                     {% for error in form.non_field_errors %}
@@ -20,6 +23,8 @@
                     {% endfor %}
                 </ul>
             {% endif %}
+    
+    </div>
 
     <div class="container d-flex align-items-center col-6 justify-content-center rounded bg-light mt-5 mb-5 pb-5 pt-5" >
       
@@ -38,6 +43,7 @@
 
                 <input type="submit" value="ورود" class="btn btn-outline-primary d-flex justify-content-end" >
                 <a href="{% url 'reset_pass' %}">?فراموشی رمز عبور</a>
+                <p class='mt-2'><a href="{% url 'register' %}">?حساب نداری</a></p>
 
 
             </form>

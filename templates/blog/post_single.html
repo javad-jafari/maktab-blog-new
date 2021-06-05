@@ -87,23 +87,11 @@
 
             
 
+    <!-- pagination -->
+        {% include 'component/paginate.html' with page_obj=comments %}
+    <!-- end pagination -->
 
-              <nav>
-                <ul class="pagination">
-                  <li>
-                    <a href="#" aria-label="Previous">
-                      <span aria-hidden="true"><i class="ion-ios-arrow-left"></i></span>
-                    </a>
-                  </li>
-                  <li class="active"><a href="#">1</a></li>
-                  <li><a href="#">2</a></li>
-                  <li>
-                    <a href="#" aria-label="Next">
-                      <span aria-hidden="true"><i class="ion-ios-arrow-right"></i></span>
-                    </a>
-                  </li>
-                </ul>
-              </nav>
+
 
             </div>
           </div>
