@@ -26,7 +26,7 @@ User = get_user_model()
 
 
 class HomeView(ListView):
-    paginate_by = 1
+    paginate_by = 9
     template_name = 'blog/index.html'
     queryset = Post.objects.filter(draft=False)
     context_object_name = 'posts'
@@ -34,8 +34,6 @@ class HomeView(ListView):
         context = super().get_context_data(**kwargs)
         context['promote'] = Post.objects.all()[:4]
         context['promote1'] = Post.objects.all()[3]
-
-
         return context
    
 
@@ -108,7 +106,10 @@ class SingleCategory(ListView):
         slug = self.kwargs.get('pk')
         category = get_object_or_404(Category.objects.filter(), slug=slug)
         posts = Post.objects.filter(category=category)
-        return posts
+        paginator = Paginator(posts, 9)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return page_obj
 
 
 

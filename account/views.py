@@ -15,9 +15,9 @@ from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from blog.models import Post
+from blog.models import Category, Post ,Comment
 from django.core.paginator import Paginator
-
+from django.core.exceptions import PermissionDenied
 
 User = get_user_model()
 
@@ -104,7 +104,7 @@ def admin_all_users(request):
         users = User.objects.all()
 
     else:
-        users = '' 
+        raise PermissionDenied()
 
     paginator = Paginator(users, 2) 
     page_number = request.GET.get('page')
@@ -116,6 +116,36 @@ def admin_all_users(request):
         'page_obj': page_obj
      }
     return render(request, 'admin/all_users.html', context)   
+
+
+
+@login_required(login_url='/accounts/login/') 
+def admin_all_categories(request):
+    if request.user.is_superuser:
+        all_cat=Category.objects.all()
+        paginator = Paginator(all_cat, 2) 
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context ={
+        'categories': page_obj}
+        return render(request, 'admin/all_categories.html', context)
+    else:
+        raise PermissionDenied()
+
+
+@login_required(login_url='/accounts/login/') 
+def admin_all_comments(request):
+    if request.user.is_superuser:
+        all_comment=Comment.objects.all()
+        paginator = Paginator(all_comment, 2) 
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context ={
+        'comments': page_obj}
+        return render(request, 'admin/all_comments.html', context)
+    else:
+        raise PermissionDenied()
+
 
 
 

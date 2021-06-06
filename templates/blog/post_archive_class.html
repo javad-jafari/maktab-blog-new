@@ -4,6 +4,7 @@
     پست ها با دسته بندی
 {% endblock %}
 
+
 {% block main %}
 
 
@@ -13,29 +14,34 @@
     <div class="row text-center">
         {% for post in posts %}
 
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card h-100">
-                    <img class="card-img-top" id="img-posts" src="{{ post.image.url }}" alt="">
-                    <div class="card-body">
-                        <h5 class="card-title"><a href="{% url 'post_single' post.slug %}">{{ post.title }}</a>
-                        </h5>
+        <div class="col-lg-4 col-md-6 mb-4 mx-5" style="margin-bottom:20px">
+            <div class="card h-100">
+                <img class="card-img-top" id="img-posts" src="{{ post.image.url }}" alt="">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{% url 'post_single' post.slug %}">{{ post.title }}</a>
+                    </h5>
 
-                        <p class="card-text">{{ post.abstract }}</p>
+                    <p class="card-text">{{ post.abstract }}</p>
 
-                    </div>
-                    <div class="card-footer">
-                        <a href="#" class="btn btn-primary">بیشتر بدانید</a>
-                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="{% url 'post_single' post.slug %}" class="btn btn-primary">بیشتر بدانید</a>
+                    <p class='badge'>{{post.create_at|timesince}} </p>
                 </div>
             </div>
+        </div>
         {% endfor %}
     </div>
+
+        <!-- pagination -->
+        {% include 'component/paginate.html' with page_obj=posts %}
+    <!-- end pagination -->
 </div>
 {% else %}
-<div class="container bg-info d-flex justify-content-center align-items-center "
-     style="width: 500px;height: 500px;">
-    <div class="container bg-warning"><p>فعلا مقاله اي با اين دسته بندي توليد نشده</p></div>
-    <div class="container"><p><i class="fa fa-3x fa-heartbeat text-danger" aria-hidden="true"> STAY AT HOME</i>
+<div style="width: 400px;height: 400px;margin:0 50px 0 450px; padding:50px; text-align: center;">
+
+    <div class=" bg-warning" style='padding:25px; text-align: center;'><p>فعلا مقاله اي با اين دسته بندي توليد نشده</p></div>
+    <div class=""><p><i class="fa fa-3x fa-heartbeat text-danger" aria-hidden="true"> STAY AT HOME</i>
     </p></div>
 
 </div>

@@ -1,0 +1,59 @@
+{% extends 'profiles/base.html' %}
+
+{% block title %}{% block title-meta %}
+	دسته بندی ها
+{% endblock %}{% endblock %}
+
+{% block main %}
+	<div class="row">
+          <div class="col-12">
+            {% if request.user.is_superuser %}
+              <div class="card">
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-0">
+                  <table class="table table-hover text-center">
+                    <thead>
+                      <tr>
+                        <th>number</th>
+                        <th>title</th>
+                        <th>slug</th>
+                        <th>parent</th>
+
+            
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for cat in categories %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{cat.title}}</td>
+                            <td>{{cat.slug}}</td>
+                            <td>{{cat.parent}}</td>
+
+
+
+                       
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
+              {% else %}
+                <div class="container d-flex justify-content-center mt-5 mb-0" dir='rtl'>               
+                  <h3>محتوایی برای نمایش وجود ندارد.</h3>                
+                </div>
+
+              {% endif %}
+          </div>
+        </div>
+            {% if request.user.is_author %}
+
+                <div class="container d-flex justify-content-center mt-5 mb-0" dir='rtl'>
+                    {% include 'component/paginate.html' with page_obj=categories %}
+
+                </div>
+            {% endif %}
+{% endblock %}

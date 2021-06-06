@@ -14,34 +14,28 @@
                   <table class="table table-hover text-center">
                     <thead>
                       <tr>
-                        <th>number</th>
+                        
                         <th>id</th>
-                        <th>name</th>
-                        <th>email</th>
-                        <th>is_author</th>
-                        <th>is_staff</th>
-                        <th>status</th>
+                        <th>content</th>
+                        <th>post</th>
+                        <th>create_at</th>
+                        <th>author</th>
+                        <th>is_confirmed</th>
             
                       </tr>
                     </thead>
                     <tbody>
-                      {% for user in page_obj %}
+                      {% for comment in comments %}
                         <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td>{{user.id}}</td>
-                            <td>{{user.get_full_name}}</td>
-                            <td>{{user.email}}</td>
-                            <td>
-                            {% if user.is_author %}
-                                <i class="fa fa-check text-success" aria-hidden="true"></i>
-                            {% else %}
-                                <i class="fa fa-times text-danger" aria-hidden="true"></i>
-                            {% endif %}
-                            </td>
+                            <td>{{comment.id}}</td>
+                            <td>{{comment.content|safe|truncatewords:2}}</td>
+                            <td>{{comment.post}}</td>
+                            <td>{{comment.create_at}}</td>
+                            <td>{{comment.author}}</td>
 
                             <td>
                             
-                            {% if user.is_staff %}
+                            {% if comment.is_confirmed%}
                                 <i class="fa fa-check text-success" aria-hidden="true"></i>
                             {% else %}
                                 <i class="fa fa-times text-danger" aria-hidden="true"></i>
@@ -50,7 +44,7 @@
 
                             <td>
                               <button class="alert alert-danger small">delete </button>
-                              <button class="alert alert-warning small">ban </button>                           
+                              <button class="alert alert-success small">confirmed </button>                           
                             </td>
                        
                         </tr>
@@ -75,7 +69,7 @@
             {% if request.user.is_author %}
 
                 <div class="container d-flex justify-content-center mt-5 mb-0" dir='rtl'>
-                    {% include 'component/paginate.html' with page=page_obj %}
+                    {% include 'component/paginate.html' with page_obj=comments %}
 
                 </div>
             {% endif %}
