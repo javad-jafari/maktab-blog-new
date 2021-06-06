@@ -69,7 +69,11 @@
                             <button type='submit' class="alert alert-danger small">
                             <a href="{% url 'delete_post' article.id %}">حذف</a>
                             </button>
-                            <button class="alert alert-info small">ویرایش</button>
+                            <button class="alert alert-info small">
+                            <a href="{% url 'update_post' article.id %}">ویرایش</a>
+                            </button>
+
+
                             {% if  article.draft%}
                               <button class="alert alert-success small">
                             <a href="{% url 'publish_post' article.id %}"> تغییر به منتشر شده  </a>   

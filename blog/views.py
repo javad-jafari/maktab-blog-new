@@ -138,8 +138,9 @@ def search_view(request):
         context = {'post': post}
         return render(request, 'search/searchbar.html', context)
 
-@login_required(login_url='/accounts/login')
 
+
+@login_required(login_url='/accounts/login')
 def newpost(request):
     post_form = NewPostForm(initial={'author':request.user})
          
@@ -164,8 +165,28 @@ def newpost(request):
         
     })
 
+@login_required(login_url='/accounts/login')
+def post_update(request,post_id):
+    post = get_object_or_404(Post,id=post_id)
+    post_form = NewPostForm(instance=post)
+         
+
+    if request.method == 'POST':
+        post_form = NewPostForm(request.POST,request.FILES ,instance=post)
+
+        if post_form.is_valid():
+
+            post_form.save()
+            messages.success(request, _('ok you update it !'))
+        else:
+            messages.warning(request, _('something get wrong'))
 
 
+    return render(request, 'profiles/new_post_create.html', {
+        'post_form': post_form,
+        
+        
+    })
 
 
 

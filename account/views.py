@@ -228,8 +228,6 @@ def change_password(request):
         'form': form
     })
 
-
-
 class ProfileUpdate(LoginRequiredMixin, UpdateView):
     model = User
     fields = ['full_name', "avatar"]
