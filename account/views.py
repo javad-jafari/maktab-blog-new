@@ -2,8 +2,8 @@ from django.contrib.auth import logout, authenticate, login, get_user_model,upda
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import ValidationError
-from django.http.response import Http404
-from django.shortcuts import render, redirect
+from django.http.response import Http404,HttpResponse
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.forms import PasswordChangeForm
 # Create your views here.
 from django.urls import reverse
@@ -76,9 +76,14 @@ class PasswordResetConfirm(auth_views.PasswordResetConfirmView):
 class PasswordResetComplete(auth_views.PasswordResetCompleteView):
 	template_name = 'registration/password_reset_complete.html'
 
+
+
+
+
 @login_required(login_url='/accounts/login/')    
 def userprofile(request):
     user = request.user.id
+    
     if request.user.is_superuser:
         posts = Post.objects.all()
 
@@ -92,9 +97,64 @@ def userprofile(request):
         
     context = {
         'user':User.objects.get(id=user),
-        'page_obj': page_obj
-     }
+        'page_obj': page_obj,
+    }
     return render(request, 'profiles/home.html', context)
+
+
+
+@login_required(login_url='/accounts/login/')
+def delete_post(request,post_id):
+
+    ''' this function delete selected post from admin side '''
+
+    if request.user.is_superuser:
+        post = get_object_or_404(Post,id=post_id)
+        if post:
+            post.delete()
+            messages.success(request, 'selected post was successfully delete!')
+            return redirect('/accounts/profile/')
+        else:
+            Http404()
+    else:
+        raise PermissionDenied()
+
+def draft_post(request,post_id):
+
+    ''' this function get draft selected post from admin side '''
+
+    if request.user.is_superuser:
+        post = get_object_or_404(Post,id=post_id)
+        if post:
+            post.draft = True
+            post.save()
+            messages.success(request, 'selected post was successfully get draft!')
+            return redirect('/accounts/profile/')
+        else:
+            Http404()
+    else:
+        raise PermissionDenied()
+
+
+
+def publish_post(request,post_id):
+
+    ''' this function get publish selected post from admin side '''
+
+    if request.user.is_superuser:
+        post = get_object_or_404(Post,id=post_id)
+        if post:
+            post.draft = False
+            post.save()
+            messages.success(request, 'selected post was successfully get publish!')
+            return redirect('/accounts/profile/')
+        else:
+            Http404()
+    else:
+        raise PermissionDenied()
+        
+
+
 
 
 @login_required(login_url='/accounts/login/') 
@@ -133,6 +193,8 @@ def admin_all_categories(request):
         raise PermissionDenied()
 
 
+
+
 @login_required(login_url='/accounts/login/') 
 def admin_all_comments(request):
     if request.user.is_superuser:
@@ -166,6 +228,8 @@ def change_password(request):
         'form': form
     })
 
+
+
 class ProfileUpdate(LoginRequiredMixin, UpdateView):
     model = User
     fields = ['full_name', "avatar"]
@@ -175,5 +239,6 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         form.instance.email = self.request.user.email
         return super().form_valid(form)
+
 
 

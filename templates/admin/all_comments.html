@@ -29,7 +29,7 @@
                         <tr>
                             <td>{{comment.id}}</td>
                             <td>{{comment.content|safe|truncatewords:2}}</td>
-                            <td>{{comment.post}}</td>
+                            <td><a href="{% url 'post_single' comment.post.slug %}">{{comment.post}}</a></td>
                             <td>{{comment.create_at}}</td>
                             <td>{{comment.author}}</td>
 
@@ -44,7 +44,12 @@
 
                             <td>
                               <button class="alert alert-danger small">delete </button>
-                              <button class="alert alert-success small">confirmed </button>                           
+                            {% if comment.is_confirmed%}
+                              <button class="alert alert-warning small">Not approved </button>
+                            {% else %}
+                              <button class="alert alert-success small">confirmed </button>
+                            {% endif %}
+
                             </td>
                        
                         </tr>

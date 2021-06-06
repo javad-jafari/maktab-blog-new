@@ -2,7 +2,7 @@ from django.urls import path, re_path
 from .views import (LogoutView, RegisterView,SignView,
 					userprofile,change_password,
 					ProfileUpdate,admin_all_users,admin_all_categories,
-					admin_all_comments,)
+					admin_all_comments,delete_post,draft_post,publish_post)
 
 from .views import UserPassReset,PasswordResetComplete,PasswordResetConfirm,PasswordResetDone
 
@@ -18,6 +18,12 @@ urlpatterns = [
 	path('confirm/<uidb64>/<token>/', PasswordResetConfirm.as_view(), name='password_reset_confirm'),
 	path('confirm/done/', PasswordResetComplete.as_view(), name='password_reset_complete'),
 	path('profile/',userprofile , name='profile'),
+	path('profile/posts/delete/<int:post_id>',delete_post , name='delete_post'),
+	path('profile/posts/draft/<int:post_id>',draft_post , name='draft_post'),
+	path('profile/posts/publish/<int:post_id>',publish_post , name='publish_post'),
+
+
+
 	path('password/', change_password, name='change_password'),
 	path('profile/update/<uuid:pk>/',ProfileUpdate.as_view() , name='profile_update'),
 	path('siteadmin/',admin_all_users , name='admin_users'),
