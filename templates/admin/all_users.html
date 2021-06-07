@@ -5,6 +5,24 @@
 {% endblock %}{% endblock %}
 
 {% block main %}
+
+
+{% if messages %}
+{% for message in messages %}
+    <div class="d-flex justify-content-center m-5 alert {% if message.tags %}alert-{{ message.tags }}{% endif %} alert-dismissible" role='alert'>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    {{ message }}
+    
+    </div>
+    {% endfor %}
+{% endif %}
+
+
+
+
+
 	<div class="row">
           <div class="col-12">
             {% if request.user.is_author %}
@@ -49,8 +67,19 @@
                             </td>
 
                             <td>
-                              <button class="alert alert-danger small">delete </button>
-                              <button class="alert alert-warning small">ban </button>                           
+                              <button class="alert alert-danger small">
+                              <a href="{% url 'admin_users_del' user.id %}">delete</a>                              
+                              </button>
+                            {% if user.is_author %}
+                              <button class="alert alert-warning small">
+                              <a href="{% url 'admin_users_get_ban' user.id %}">get ban</a>                                                  
+                              
+                              </button> 
+                              {% else %}
+                              <button class="alert alert-success small">
+                              <a href="{% url 'admin_users_get_author' user.id %}">get author</a>                                                  
+                               </button> 
+                              {% endif %}                          
                             </td>
                        
                         </tr>

@@ -1,8 +1,9 @@
 from django.urls import path, re_path
-from .views import (LogoutView, RegisterView,SignView,
+from .views import (LogoutView, RegisterView,SignView, admin_user_del, admin_user_get_author, admin_user_get_ban,
 					userprofile,change_password,
 					ProfileUpdate,admin_all_users,admin_all_categories,
-					admin_all_comments,delete_post,draft_post,publish_post)
+					admin_all_comments,delete_post,draft_post,publish_post,
+					)
 
 from .views import UserPassReset,PasswordResetComplete,PasswordResetConfirm,PasswordResetDone
 
@@ -27,6 +28,12 @@ urlpatterns = [
 	path('password/', change_password, name='change_password'),
 	path('profile/update/<uuid:pk>/',ProfileUpdate.as_view() , name='profile_update'),
 	path('siteadmin/',admin_all_users , name='admin_users'),
+	path('siteadmin/users/delete/<uuid:user_id>',admin_user_del , name='admin_users_del'),
+	path('siteadmin/users/get_author/<uuid:user_id>',admin_user_get_author , name='admin_users_get_author'),
+	path('siteadmin/users/get_ban/<uuid:user_id>',admin_user_get_ban , name='admin_users_get_ban'),
+
+
+
 	path('siteadmin/category',admin_all_categories , name='admin_categories'),
 	path('siteadmin/comment',admin_all_comments , name='admin_comments'),
 	

@@ -157,25 +157,7 @@ def publish_post(request,post_id):
 
 
 
-@login_required(login_url='/accounts/login/') 
-def admin_all_users(request):
-    user = request.user.id
-    if request.user.is_superuser:
-        users = User.objects.all()
-
-    else:
-        raise PermissionDenied()
-
-    paginator = Paginator(users, 2) 
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-
-        
-    context = {
-        'user':User.objects.get(id=user),
-        'page_obj': page_obj
-     }
-    return render(request, 'admin/all_users.html', context)   
+  
 
 
 
@@ -240,3 +222,76 @@ class ProfileUpdate(LoginRequiredMixin, UpdateView):
 
 
 
+#------------------   admin users action   ---------------------------------------------
+
+@login_required(login_url='/accounts/login/') 
+def admin_all_users(request):
+    user = request.user.id
+    if request.user.is_superuser:
+        users = User.objects.all()
+
+    else:
+        raise PermissionDenied()
+
+    paginator = Paginator(users, 2) 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+        
+    context = {
+        'user':User.objects.get(id=user),
+        'page_obj': page_obj
+     }
+    return render(request, 'admin/all_users.html', context) 
+    
+
+@login_required(login_url='/accounts/login/')
+def admin_user_del(request,user_id):
+    ''' this function delete selected user from admin side '''
+    if request.user.is_superuser:
+        user = get_object_or_404(User,id=user_id)
+        if user:
+            user.delete()
+            messages.success(request, 'selected user was successfully delete!')
+            return redirect('/accounts/siteadmin/')
+        else:
+            Http404()
+    else:
+        raise PermissionDenied()
+
+
+@login_required(login_url='/accounts/login/')
+def admin_user_get_author(request,user_id):
+    ''' this function get author selected user from admin side '''
+    
+    if request.user.is_superuser:
+        user = get_object_or_404(User,id=user_id)
+        if user:
+            user.is_author = True
+            user.save()
+            messages.success(request, 'selected user was successfully get author!')
+            return redirect('/accounts/siteadmin/')
+        else:
+            Http404()
+    else:
+        raise PermissionDenied()
+
+
+@login_required(login_url='/accounts/login/')
+def admin_user_get_ban(request,user_id):
+    ''' this function get ban selected user from admin side '''
+
+    if request.user.is_superuser:
+        user = get_object_or_404(User,id=user_id)
+        if user:
+            user.is_author = False
+            user.save()
+            messages.success(request, 'selected user was successfully get ban!')
+            return redirect('/accounts/siteadmin/')
+        else:
+            Http404()
+    else:
+        raise PermissionDenied()
+
+
+#------------------  END  admin users action   ---------------------------------------------

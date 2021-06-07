@@ -32,8 +32,8 @@ class HomeView(ListView):
     context_object_name = 'posts'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['promote'] = Post.objects.all()[:4]
-        context['promote1'] = Post.objects.all()[3]
+        context['promote'] = Post.objects.all()
+        context['promote1'] = Post.objects.all()[1]
         return context
    
 
