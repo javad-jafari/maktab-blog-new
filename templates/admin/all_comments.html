@@ -1,7 +1,7 @@
 {% extends 'profiles/base.html' %}
 
 {% block title %}{% block title-meta %}
-	لیست افراد
+	لیست نظرات
 {% endblock %}{% endblock %}
 
 {% block main %}
@@ -38,6 +38,8 @@
                         <th>post</th>
                         <th>create_at</th>
                         <th>author</th>
+                        <th>like</th>
+                        <th>dislike</th>
                         <th>is_confirmed</th>
             
                       </tr>
@@ -47,8 +49,8 @@
                         <tr>
                             <td>{{comment.id}}</td>
                             <td>
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-sm-{{ forloop.counter }}">نمایش نظر</button>
-                              <div class="modal fade bd-example-modal-sm-{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-sm-{{comment.id}}"><p class='small'>نمایش نظر</p></button>
+                              <div class="modal fade bd-example-modal-sm-{{comment.id}}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-sm">
                                   <div class="modal-content">
                                    {{ comment.content}}
@@ -59,6 +61,10 @@
                             <td><a href="{% url 'post_single' comment.post.slug %}">{{comment.post}}</a></td>
                             <td>{{comment.create_at}}</td>
                             <td>{{comment.author}}</td>
+                            <td>{{comment.like_count}}</td>
+                            <td>{{comment.dislike_count}}</td>
+
+                      
 
                             <td>
                             
@@ -89,6 +95,7 @@
                             {% endif %}
 
                             </td>
+        
                        
                         </tr>
 

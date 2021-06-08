@@ -23,8 +23,6 @@ urlpatterns = [
 	path('profile/posts/draft/<int:post_id>',draft_post , name='draft_post'),
 	path('profile/posts/publish/<int:post_id>',publish_post , name='publish_post'),
 
-
-
 	path('password/', change_password, name='change_password'),
 	path('profile/update/<uuid:pk>/',ProfileUpdate.as_view() , name='profile_update'),
 	path('siteadmin/',admin_all_users , name='admin_users'),
@@ -32,13 +30,9 @@ urlpatterns = [
 	path('siteadmin/users/get_author/<uuid:user_id>',admin_user_get_author , name='admin_users_get_author'),
 	path('siteadmin/users/get_ban/<uuid:user_id>',admin_user_get_ban , name='admin_users_get_ban'),
 
-
-
 	path('siteadmin/category',admin_all_categories , name='admin_categories'),
 	path('siteadmin/comment',admin_all_comments , name='admin_comments'),
 	path('siteadmin/comment/delete/<int:comment_id>',admin_comment_del , name='admin_comment_del'),
 	path('siteadmin/comment/confirm/<int:comment_id>/<str:status>',admin_comment_confirm , name='admin_comment_confirm'),
 
-
-	
 ]

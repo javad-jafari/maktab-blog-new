@@ -29,6 +29,7 @@
                   <table class="table table-hover text-center">
                     <thead>
                       <tr>
+                        <th>شماره مقاله</th>
                         <th>عنوان مقاله</th>
                         <th>تصویر بندانگشتی</th>
                         <th>دسته‌بندی</th>
@@ -43,6 +44,8 @@
                     <tbody>
                       {% for article in page_obj %}
                         <tr>
+                          <td>{{article.id}}</td>
+
                           <td>
                           <a href="{% url "post_single" article.slug %}">
                             {{article.title}}
