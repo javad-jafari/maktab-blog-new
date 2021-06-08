@@ -5,7 +5,7 @@ from django.forms import fields
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import User
 from blog.validators import validate_password, validate_username
-from blog.models import Post
+from blog.models import Category, Post
 
 User = get_user_model()
 
@@ -78,7 +78,10 @@ class UserProfileForm(forms.ModelForm):
         model = User
         fields = '__all__'
 
-
+class AdminCategory(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = '__all__'    
 
 
 

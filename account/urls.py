@@ -1,5 +1,5 @@
 from django.urls import path, re_path
-from .views import (LogoutView, RegisterView,SignView, admin_comment_confirm, admin_comment_del, admin_user_del, admin_user_get_author, admin_user_get_ban,
+from .views import (LogoutView, RegisterView,SignView, admin_add_category, admin_comment_confirm, admin_comment_del, admin_user_del, admin_user_get_author, admin_user_get_ban,
 					userprofile,change_password,
 					ProfileUpdate,admin_all_users,admin_all_categories,
 					admin_all_comments,delete_post,draft_post,publish_post,
@@ -31,6 +31,8 @@ urlpatterns = [
 	path('siteadmin/users/get_ban/<uuid:user_id>',admin_user_get_ban , name='admin_users_get_ban'),
 
 	path('siteadmin/category',admin_all_categories , name='admin_categories'),
+	path('siteadmin/category/new',admin_add_category , name='admin_new_category_add'),
+	path('siteadmin/category/delete/<int:cat_id>',admin_all_categories , name='admin_categories_del'),
 	path('siteadmin/comment',admin_all_comments , name='admin_comments'),
 	path('siteadmin/comment/delete/<int:comment_id>',admin_comment_del , name='admin_comment_del'),
 	path('siteadmin/comment/confirm/<int:comment_id>/<str:status>',admin_comment_confirm , name='admin_comment_confirm'),

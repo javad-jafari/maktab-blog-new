@@ -9,7 +9,7 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.urls import reverse
 from django.views import View
 from django.views.generic import RedirectView ,UpdateView
-from account.forms import UserThirdRegistrationForm
+from account.forms import AdminCategory, UserThirdRegistrationForm
 from django.contrib.auth import views as auth_views
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
@@ -155,18 +155,7 @@ def publish_post(request,post_id):
         
 
   
-@login_required(login_url='/accounts/login/') 
-def admin_all_categories(request):
-    if request.user.is_superuser:
-        all_cat=Category.objects.all()
-        paginator = Paginator(all_cat, 2) 
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        context ={
-        'categories': page_obj}
-        return render(request, 'admin/all_categories.html', context)
-    else:
-        raise PermissionDenied()
+
 
 
 
@@ -321,10 +310,13 @@ def admin_comment_confirm(request,comment_id,status):
             if status == '1':
                 comment.is_confirmed =True
                 comment.save()
+                messages.success(request, 'selected comment was successfully confirmed !')
+
             elif status == '0':
                 comment.is_confirmed =False
-                comment.save()                           
-            messages.success(request, 'selected comment was successfully confirmed !')
+                comment.save() 
+                messages.success(request, 'selected comment was successfully exit from confirmed !')
+
             return redirect('/accounts/siteadmin/comment')
         else:
             Http404()
@@ -332,3 +324,51 @@ def admin_comment_confirm(request,comment_id,status):
         raise PermissionDenied()
 
 #------------------  END  admin comment action   ---------------------------------------------
+
+
+
+
+#------------------ admin categories action   ---------------------------------------------
+
+
+@login_required(login_url='/accounts/login/') 
+def admin_all_categories(request):
+    if request.user.is_superuser:
+        all_cat=Category.objects.all().order_by('id')
+        paginator = Paginator(all_cat, 2) 
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context ={
+        'categories': page_obj}
+        return render(request, 'admin/all_categories.html', context)
+    else:
+        raise PermissionDenied()
+
+
+
+
+def admin_add_category(request):
+    ''' this function add new cat from admin side '''  
+    if request.user.is_superuser:
+        form = AdminCategory()
+
+        if request.method == 'POST':
+            form = AdminCategory(request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'category was successfully added !')
+                return redirect('/accounts/siteadmin/category/new')
+            else:
+
+                messages.warning(request, 'something get wrong !')
+                context ={'form':form}
+                return render(request,'admin/new_cat.html',context)
+
+        else:
+            context ={'form':form}
+            return render(request,'admin/new_cat.html',context)
+    else:
+        raise PermissionDenied()
+
+
+#------------------  END  admin categories action   ---------------------------------------------
