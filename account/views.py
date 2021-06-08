@@ -154,13 +154,7 @@ def publish_post(request,post_id):
         raise PermissionDenied()
         
 
-
-
-
   
-
-
-
 @login_required(login_url='/accounts/login/') 
 def admin_all_categories(request):
     if request.user.is_superuser:
@@ -174,21 +168,6 @@ def admin_all_categories(request):
     else:
         raise PermissionDenied()
 
-
-
-
-@login_required(login_url='/accounts/login/') 
-def admin_all_comments(request):
-    if request.user.is_superuser:
-        all_comment=Comment.objects.all()
-        paginator = Paginator(all_comment, 2) 
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        context ={
-        'comments': page_obj}
-        return render(request, 'admin/all_comments.html', context)
-    else:
-        raise PermissionDenied()
 
 
 
@@ -243,7 +222,7 @@ def admin_all_users(request):
         'page_obj': page_obj
      }
     return render(request, 'admin/all_users.html', context) 
-    
+
 
 @login_required(login_url='/accounts/login/')
 def admin_user_del(request,user_id):
@@ -295,3 +274,61 @@ def admin_user_get_ban(request,user_id):
 
 
 #------------------  END  admin users action   ---------------------------------------------
+
+
+
+
+#------------------ admin comment action   ---------------------------------------------
+
+@login_required(login_url='/accounts/login/') 
+def admin_all_comments(request):
+    if request.user.is_superuser:
+        all_comment=Comment.objects.all()
+        paginator = Paginator(all_comment, 2) 
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context ={
+        'comments': page_obj}
+        return render(request, 'admin/all_comments.html', context)
+    else:
+        raise PermissionDenied()
+
+
+
+
+def admin_comment_del(request,comment_id):
+
+    ''' this function delete selected comment from admin side '''
+    
+    if request.user.is_superuser:
+        comment = get_object_or_404(Comment,id=comment_id)
+        if comment:
+            comment.delete()            
+            messages.success(request, 'selected comment was successfully delete !')
+            return redirect('/accounts/siteadmin/comment')
+        else:
+            Http404()
+    else:
+        raise PermissionDenied()
+
+def admin_comment_confirm(request,comment_id,status):
+
+    ''' this function confirm selected comment from admin side '''
+    
+    if request.user.is_superuser:
+        comment = get_object_or_404(Comment,id=comment_id)
+        if comment:
+            if status == '1':
+                comment.is_confirmed =True
+                comment.save()
+            elif status == '0':
+                comment.is_confirmed =False
+                comment.save()                           
+            messages.success(request, 'selected comment was successfully confirmed !')
+            return redirect('/accounts/siteadmin/comment')
+        else:
+            Http404()
+    else:
+        raise PermissionDenied()
+
+#------------------  END  admin comment action   ---------------------------------------------

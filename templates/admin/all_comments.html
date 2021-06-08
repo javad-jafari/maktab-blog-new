@@ -5,6 +5,24 @@
 {% endblock %}{% endblock %}
 
 {% block main %}
+
+{% if messages %}
+{% for message in messages %}
+    <div class="d-flex justify-content-center m-5 alert {% if message.tags %}alert-{{ message.tags }}{% endif %} alert-dismissible" role='alert'>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    {{ message }}
+    
+    </div>
+    {% endfor %}
+{% endif %}
+
+
+
+
+
+
 	<div class="row">
           <div class="col-12">
             {% if request.user.is_author %}
@@ -28,7 +46,16 @@
                       {% for comment in comments %}
                         <tr>
                             <td>{{comment.id}}</td>
-                            <td>{{comment.content|safe|truncatewords:2}}</td>
+                            <td>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-sm-{{ forloop.counter }}">نمایش نظر</button>
+                              <div class="modal fade bd-example-modal-sm-{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-sm">
+                                  <div class="modal-content">
+                                   {{ comment.content}}
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
                             <td><a href="{% url 'post_single' comment.post.slug %}">{{comment.post}}</a></td>
                             <td>{{comment.create_at}}</td>
                             <td>{{comment.author}}</td>
@@ -43,16 +70,28 @@
                             </td>
 
                             <td>
-                              <button class="alert alert-danger small">delete </button>
+                              <button class="alert alert-danger small">
+                              <a href="{% url 'admin_comment_del' comment.id  %}">
+                              delete
+                              </a>
+                               </button>
                             {% if comment.is_confirmed%}
-                              <button class="alert alert-warning small">Not approved </button>
+                              <button class="alert alert-warning small">
+                              <a href="{% url 'admin_comment_confirm' comment_id=comment.id status='0' %}">
+                              Not approved</a>
+
+                              </button>
                             {% else %}
-                              <button class="alert alert-success small">confirmed </button>
+                              <button class="alert alert-success small">
+                              <a href="{% url 'admin_comment_confirm' comment_id=comment.id status='1' %}">
+                                confirmed </a>
+                              </button>
                             {% endif %}
 
                             </td>
                        
                         </tr>
+
                       {% endfor %}
                     </tbody>
                   </table>
@@ -60,6 +99,8 @@
                 <!-- /.card-body -->
               </div>
               <!-- /.card -->
+
+
               {% else %}
 
               
