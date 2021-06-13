@@ -61,6 +61,11 @@
     <div class="toplinks">
       <a href="{% url 'register' %}" > <i class="ion-person"></i> ثبت نام</a>
       <a href="{% url 'login' %}?next={{request.path}}" > <i class="ion-unlocked"></i> ورود</a>
+      <p style='text-align: left;color:white'> <i class="ion-time"></i>
+      {% timezone "Asia/Tehran" %}
+          Tehran time: {{ time }}
+      {% endtimezone %}
+      </p>
     </div>
 
 {% endif %}
@@ -113,7 +118,7 @@
 
 
       <div >
-        <div class="input">
+        <div class="input" dir='rtl'>
           <form action="{% url 'searchbar' %}" method="get" class="form-inline">
             <button type="submit"><i class="ion-ios-search"></i></button>
 
@@ -142,18 +147,15 @@
 
 
 
-    <hr class="offset-md">
-
     {% block main %}{% endblock  %}
 
-    <hr class="offset-lg">
-    <hr class="offset-sm">
+
     <footer>
 
 
       <div class="subscribe">
         <div class="container align-center">
-            <hr class="offset-md">
+            
 
             <h1 class="h3 upp">عضویت در خبرنامه</h1>
             <p>!از  مقالات مورد علاقت سریع تر مطلع شو</p>

@@ -3,7 +3,7 @@
             {% if page_obj.has_previous %}
             <li>
               <a href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
-                <span aria-hidden="true"><i class="ion-ios-arrow-left"></i></span>
+                <span aria-hidden="true"><i class="ion-ios-arrow-left px-2"></i></span>
               </a>
             </li>
             {% endif %}
@@ -24,7 +24,7 @@
         {% if page_obj.has_next %}
             <li>
               <a href="?page={{ page_obj.next_page_number }}" aria-label="Next">
-                <span aria-hidden="true"><i class="ion-ios-arrow-right"></i></span>
+                <span aria-hidden="true"><i class="ion-ios-arrow-right px-2"></i></span>
               </a>
             </li>
         {% endif %}
