@@ -105,7 +105,12 @@
 
 
                 <div class="container d-flex justify-content-center mt-5 mb-0" dir='rtl'>
-                  <h2><a href="#">در خواست برای نویسنده شدن</a></h2>
+                {% if get_author %}
+                  <p style='color:green'>در خواست شما در حال بررسی می باشد</p>
+                {% else %}
+                  <h2><a href="{% url 'get_author_req' request.user.id %}">
+                  در خواست برای نویسنده شدن</a></h2>
+                {% endif %}
                 </div>
 
               {% endif %}

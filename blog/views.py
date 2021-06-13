@@ -7,7 +7,7 @@ from blog.models import Comment
 from django.http import HttpResponse, request
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
-from .models import CommentLike, Post, Category, PostSetting
+from .models import CommentLike, Post, Category, PostSetting, RequestAuthor
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.views.generic import TemplateView, DetailView, ListView
@@ -211,6 +211,7 @@ class BlogerPostView(DetailView):
         context["posts"] = page_obj
         return context
     
+
 
 
 # def register_view(request):

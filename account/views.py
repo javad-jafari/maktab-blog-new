@@ -15,9 +15,11 @@ from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from blog.models import Category, Post ,Comment
+from blog.models import Category, Post ,Comment, RequestAuthor
 from django.core.paginator import Paginator
 from django.core.exceptions import PermissionDenied
+from django.utils.translation import ugettext_lazy as _
+
 
 User = get_user_model()
 
@@ -39,9 +41,6 @@ class SignView(LoginView):
 
 class RegisterView(View):
     def get(self, request):
-        print(30*'*')
-        print(request.META["HTTP_REFERER"])
-        print(30*'*')
         if request.user.is_authenticated:
             return redirect('home')
         return render(request, 'registration/register.html', {'form': UserThirdRegistrationForm})
@@ -86,9 +85,15 @@ def userprofile(request):
     
     if request.user.is_superuser:
         posts = Post.objects.all()
+        get_author=None
+
 
     else:
-        posts = Post.objects.filter(author_id=user)  
+        posts = Post.objects.filter(author_id=user)
+        try:
+            get_author = RequestAuthor.objects.get(user_id=user)
+        except RequestAuthor.DoesNotExist:
+            get_author=None
 
     paginator = Paginator(posts, 2) 
     page_number = request.GET.get('page')
@@ -98,6 +103,7 @@ def userprofile(request):
     context = {
         'user':User.objects.get(id=user),
         'page_obj': page_obj,
+        'get_author':get_author,
     }
     return render(request, 'profiles/home.html', context)
 
@@ -238,6 +244,7 @@ def admin_user_get_author(request,user_id):
             user.is_author = True
             user.save()
             messages.success(request, 'selected user was successfully get author!')
+
             return redirect('/accounts/siteadmin/')
         else:
             Http404()
@@ -346,6 +353,7 @@ def admin_all_categories(request):
 
 
 
+@login_required(login_url='/accounts/login/') 
 
 def admin_add_category(request):
     ''' this function add new cat from admin side '''  
@@ -372,3 +380,69 @@ def admin_add_category(request):
 
 
 #------------------  END  admin categories action   ---------------------------------------------
+
+
+
+#------------------  user request to get author   ---------------------------------------------
+
+@login_required(login_url='/accounts/login/') 
+def get_author_req(request,user_id):
+    user = get_object_or_404(User,id=user_id)
+    if user:
+        RequestAuthor.objects.create(user=user)
+        messages.success(request, _('ok your request registered'))
+        return redirect('/accounts/profile/')
+    else:
+        messages.warning(request, _('something get wrong!'))
+        return redirect('/accounts/profile/')
+
+#------------------ END user request to get author   ---------------------------------------------
+
+
+
+
+
+
+#------------------  user request to get author   ---------------------------------------------
+
+@login_required(login_url='/accounts/login/') 
+def admin_all_req_to_author(request):
+
+    user = request.user.id
+    if request.user.is_superuser:
+        users = RequestAuthor.objects.all()
+
+    else:
+        raise PermissionDenied()
+
+    paginator = Paginator(users, 2) 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+        
+    context = {
+        'user':User.objects.get(id=user),
+        'page_obj': page_obj
+     }
+    return render(request, 'admin/author_req.html', context) 
+
+
+@login_required(login_url='/accounts/login/')
+def admin_confirm_to_author(request,user_id):
+    ''' this function get author selected user from admin side '''
+    
+    if request.user.is_superuser:
+        user = get_object_or_404(User,id=user_id)
+        if user:
+            user.is_author = True
+            user.save()
+            messages.success(request, 'selected user was successfully get author!')
+
+            return redirect('/accounts/siteadmin/requested_to_get_author')
+        else:
+            Http404()
+    else:
+        raise PermissionDenied()
+
+#-------------------------------------------------------------------------------------
+

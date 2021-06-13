@@ -119,3 +119,11 @@ class Comment(models.Model):
     def dislike_count(self):
         q = self.comment_like.filter(condition=False)
         return q.count()
+
+
+class RequestAuthor(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_(
+        "Author_req"), on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.user.email

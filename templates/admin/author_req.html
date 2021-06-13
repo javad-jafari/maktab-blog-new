@@ -1,0 +1,110 @@
+{% extends 'profiles/base.html' %}
+
+{% block title %}{% block title-meta %}
+	لیست افراد
+{% endblock %}{% endblock %}
+
+{% block main %}
+
+
+{% if messages %}
+{% for message in messages %}
+    <div class="d-flex justify-content-center m-5 alert {% if message.tags %}alert-{{ message.tags }}{% endif %} alert-dismissible" role='alert'>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    {{ message }}
+    
+    </div>
+    {% endfor %}
+{% endif %}
+
+
+
+
+
+	<div class="row">
+          <div class="col-12">
+            {% if request.user.is_author %}
+              <div class="card">
+                <!-- /.card-header -->
+                <div class="card-body table-responsive p-0">
+                  <table class="table table-hover text-center">
+                    <thead>
+                      <tr>
+                        <th>number</th>
+                        <th>id</th>
+                        <th>name</th>
+                        <th>email</th>
+                        <th>is_author</th>
+                        <th>is_staff</th>
+                        <th>status</th>
+
+            
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for req in page_obj %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{req.user.id}}</td>
+                            <td>{{req.user.get_full_name}}</td>
+                            <td>{{req.user.email}}</td>
+                            <td>
+                            {% if req.user.is_author %}
+                                <i class="fa fa-check text-success" aria-hidden="true"></i>
+                            {% else %}
+                                <i class="fa fa-times text-danger" aria-hidden="true"></i>
+                            {% endif %}
+                            </td>
+
+                            <td>
+                            
+                            {% if req.user.is_staff %}
+                                <i class="fa fa-check text-success" aria-hidden="true"></i>
+                            {% else %}
+                                <i class="fa fa-times text-danger" aria-hidden="true"></i>
+                            {% endif %}
+                            </td>
+
+                            <td>
+                            {% if  req.user.is_author %}
+                            <button class="alert alert-info small"> is author
+                            </button> 
+                            
+                            {% else %}
+
+                            <button class="alert alert-success small">
+                              <a href="{% url 'admin_confirm_to_author' req.user.id %}">get author</a>                                                  
+                            </button> 
+                            {% endif %}
+                            </td>
+
+
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+                <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
+              {% else %}
+
+              
+                <div class="container d-flex justify-content-center mt-5 mb-0" dir='rtl'>               
+                  <h3>محتوایی برای نمایش وجود ندارد.</h3>                
+                </div>
+
+
+              {% endif %}
+          </div>
+        </div>
+            {% if request.user.is_author %}
+
+                <div class="container d-flex justify-content-center mt-5 mb-0" dir='rtl'>
+                    {% include 'component/paginate.html' with page=page_obj %}
+
+                </div>
+            {% endif %}
+{% endblock %}
