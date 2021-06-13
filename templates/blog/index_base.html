@@ -1,5 +1,6 @@
 {% load static %}
 {% load mptt_tags %}
+{% load tz %}
 
 <!DOCTYPE html>
 <html lang="en" >
@@ -45,17 +46,26 @@
 {% if request.user.is_authenticated %}
 
     <div class="toplinks">
+    
       <a href="{% url 'profile'%}" > <i class="ion-profile"></i>خوش آمدید {{request.user}}</a>
       <a href="{% url 'logout' %}" > <i class="ion-close"></i> خروج</a>
+      <p style='text-align: left;color:white'> <i class="ion-time"></i>
+      {% timezone "Asia/Tehran" %}
+          Tehran time: {{ time }}
+      {% endtimezone %}
+      </p>
+      
     </div>
 {% else %}
 
     <div class="toplinks">
       <a href="{% url 'register' %}" > <i class="ion-person"></i> ثبت نام</a>
-      <a href="{% url 'login' %}" > <i class="ion-unlocked"></i> ورود</a>
+      <a href="{% url 'login' %}?next={{request.path}}" > <i class="ion-unlocked"></i> ورود</a>
     </div>
 
 {% endif %}
+
+ 
 
     
 <nav class="navbar navbar-default">

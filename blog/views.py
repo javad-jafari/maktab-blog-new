@@ -79,7 +79,7 @@ class SinglePost(DetailView):
     template_name = 'blog/post_single.html'
 
     def get_object(self):
-        slug = self.kwargs.get('pk')
+        slug = self.kwargs.get('slug')
         item = get_object_or_404(Post.objects.select_related('post_setting', 'category', 'author'), slug=slug)
         item.incrementViewCount()
         return item
@@ -87,12 +87,12 @@ class SinglePost(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         post = context['post']
-        related_comment = post.comments.filter(post__slug = self.kwargs.get('pk'),is_confirmed=True)
+        related_comment = post.comments.filter(post__slug = self.kwargs.get('slug'),is_confirmed=True)
         paginator = Paginator(related_comment, 6) 
         page_number = self.request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         context['comments'] = page_obj
-        context['settings'] = PostSetting.objects.get(post__slug = self.kwargs.get('pk'))
+        context['settings'] = PostSetting.objects.get(post__slug = self.kwargs.get('slug'))
         context['form'] = CommentForm()
         return context
 
@@ -103,7 +103,7 @@ class SingleCategory(ListView):
     context_object_name = 'posts'
 
     def get_queryset(self):
-        slug = self.kwargs.get('pk')
+        slug = self.kwargs.get('slug')
         category = get_object_or_404(Category.objects.filter(), slug=slug)
         posts = Post.objects.filter(category=category)
         paginator = Paginator(posts, 9)
@@ -125,8 +125,9 @@ class SearchResultsView(ListView):
 
     def get_queryset(self):
         query = self.request.GET.get('search')
+
         object_list = Post.objects.filter(
-            Q(title__icontains=query) | Q(category__title__icontains=query)
+            Q(title__icontains=query) | Q(category__title__icontains=query) | Q(slug__icontains=query)
         )
         return object_list
 

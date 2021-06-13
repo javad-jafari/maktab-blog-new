@@ -121,7 +121,7 @@ class NewPostForm(forms.ModelForm):
     content = forms.CharField(label=_('content'), widget=CKEditorWidget)
     class Meta:
         model = Post
-        exclude = ['author','seen']
+        exclude = ['author','seen','slug']
         
 
 class NewPostSetForm(forms.ModelForm):

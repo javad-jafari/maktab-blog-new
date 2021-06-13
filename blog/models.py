@@ -4,10 +4,15 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from ckeditor.fields import RichTextField
 from mptt.models import MPTTModel, TreeForeignKey
+from django.utils.text import slugify
+
+
+
+
 
 class Category(MPTTModel):
     title = models.CharField(_("Title"), max_length=50)
-    slug = models.SlugField(_("Slug"), unique=True, db_index=True)
+    slug = models.SlugField(_("Slug"), unique=True, db_index=True, allow_unicode=True)
     parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
 
     class MPTTMeta:
@@ -49,6 +54,11 @@ class Post(models.Model):
         self.seen += 1
         self.save()
         return self.seen
+
+    def save(self, *args, **kwargs):
+        value = self.title
+        self.slug = slugify(value, allow_unicode=True)
+        super().save(*args, **kwargs)
 
 
 class PostSetting(models.Model):

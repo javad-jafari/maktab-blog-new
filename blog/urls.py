@@ -19,16 +19,16 @@ router.register(r'settings', PostSetViewModel)
 urlpatterns = [
 
     path('', HomeView.as_view(), name='home'),
-    path('posts/<slug:pk>/', SinglePost.as_view(), name='post_single'),
-    path('categories/<slug:pk>/', SingleCategory.as_view(), name='category_single'),
+    re_path(r'posts/(?P<slug>[-\w]+)/', SinglePost.as_view(), name='post_single'),
+    re_path(r'categories/(?P<slug>[-\w]+)/', SingleCategory.as_view(), name='category_single'),
     path('about_us/', AboutView.as_view(), name='about'),
     path('like_comment/', like_comment, name='like_comment'),
     path('comments/', create_comment, name='add_comment'),
     path('searchbar/', SearchResultsView.as_view(), name='searchbar'),
     path('comments/', create_comment, name='add_comment'),
-    path('posts/create/v1/', newpost, name='new_post'),
-    path('posts/update/v1/<int:post_id>', post_update, name='update_post'),
-    path('posts/bloger/<uuid:pk>', BlogerPostView.as_view(), name='bloger_post'),
+    path('post/create/v1/', newpost, name='new_post'),
+    path('post/update/v1/<int:post_id>', post_update, name='update_post'),
+    path('post/bloger/<uuid:pk>', BlogerPostView.as_view(), name='bloger_post'),
 
 
 
