@@ -1,6 +1,6 @@
 {% extends 'blog/index_base.html' %}
 {% load static %}
-
+{% load filters %}
 {% block title %} {{author.full_name}}/posts {% endblock %}
 
 {% block main %}
@@ -64,7 +64,7 @@
                 </div>
                 <div class="card-footer">
                     <a href="{% url 'post_single' post.slug %}" class="btn btn-primary">بیشتر بدانید</a>
-                    <p class='badge'>{{post.create_at|timesince}} </p>
+                    <p class='badge'>{{post.create_at|timesince|convertor}} </p>
                 </div>
             </div>
         </div>

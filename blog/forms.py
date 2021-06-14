@@ -12,6 +12,8 @@ from ckeditor.widgets import CKEditorWidget
 import re
 import datetime
 from blog.models import Post
+from jalali_date.fields import JalaliDateField, SplitJalaliDateTimeField
+from jalali_date.widgets import AdminJalaliDateWidget, AdminSplitJalaliDateTime
 # User = get_user_model()
 
 class UserRegistrationForm(forms.Form):
@@ -102,7 +104,7 @@ class UserThirdRegistrationForm(forms.ModelForm):
 
 
 
-#--------------------------------------------------------------------------------------------------
+#---------------------------find specific date FEXML Tomorroow------------------------------------------------
 def get_today():
     return datetime.datetime.now().date()
 
@@ -115,13 +117,27 @@ DATE_SELECTION = (
         (TODAY, "Today"),
         (TOMORROW, "Tomorrow"),
     )
+#---------------------------------------------------------------------------------------------
+
+
+
 
 class NewPostForm(forms.ModelForm):
-    publish_time = forms.DateField(input_formats=["%Y-%m-%d"], widget=forms.Select(choices=DATE_SELECTION))
+    # publish_time = forms.DateField(input_formats=["%Y-%m-%d"], widget=forms.Select(choices=DATE_SELECTION))
     content = forms.CharField(label=_('content'), widget=CKEditorWidget)
     class Meta:
         model = Post
         exclude = ['author','seen','slug']
+    
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['publish_time'] = JalaliDateField(label=_('date'), # date format is  "yyyy-mm-dd"
+            widget=AdminJalaliDateWidget # optional, to use default datepicker
+        )
+        # self.fields['publish_time'] = SplitJalaliDateTimeField(label=_('date time'), 
+        #     widget=AdminSplitJalaliDateTime # required, for decompress DatetimeField to JalaliDateField and JalaliTimeField
+        # )
         
 
 class NewPostSetForm(forms.ModelForm):

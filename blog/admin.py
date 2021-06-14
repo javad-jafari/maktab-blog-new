@@ -5,13 +5,11 @@ from .models import Post, Category, Comment, PostSetting, CommentLike, RequestAu
 
 # Register your models here.
 
-
-
-
-
-
-
 from mptt.admin import DraggableMPTTAdmin
+
+
+from jalali_date import datetime2jalali, date2jalali
+
 
 
 
@@ -114,6 +112,8 @@ class PostAdmin(admin.ModelAdmin):
     # allow_discoution.short_description = "allow user write comment on posts"
 
     actions = [make_published]
+
+
 
 
 @admin.register(Comment)

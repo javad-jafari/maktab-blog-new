@@ -1,7 +1,11 @@
 {% extends 'blog/index_base.html' %}
 
-
 {% load static %}
+{% load filters %}
+{% load jalali_tags %}
+
+
+
 {% block title %}
     {{ post.slug }}
 {% endblock %}
@@ -25,9 +29,9 @@
   		    		 <button class="btn btn-info btn-sm whatsapp"> <i class="ion-social-twitter"></i> Retweet</button>
   		    		 <button class="btn btn-danger btn-sm whatsapp"> <i class="ion-social-googleplus"></i> Plus </button>
   	    		<p style="padding:35px">
-            دسته بندی:<a href='' style="margin-right:50px" > {{post.category}}</a>
-            تاریخ انتشار:<a href='#' style="margin-right:50px" > {{post.create_at}}</a>
-            نویسنده:<a href="{% url 'bloger_post' post.author.id %}" style="margin-right:50px" > {{post.author}}</a>
+            <p><a href="{% url 'category_single' post.category %}" style="" > {{post.category}}</a>:دسته بندی</p>
+            <p>تاریخ انتشار:<a href='#' style="" > {{post.create_at|to_jalali:'%y/%m/%d _ %H:%M:%S'|convertor}}</a></p>
+            <p><a href="{% url 'bloger_post' post.author.id %}" style="" > {{post.author}}</a>:نویسنده</p>
             </p>
             </div>
   	    	</div>

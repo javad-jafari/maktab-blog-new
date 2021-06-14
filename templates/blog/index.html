@@ -1,7 +1,11 @@
-   {% extends 'blog/index_base.html' %}
+{% extends 'blog/index_base.html' %}
+{% load static %}
+{% load jalali_tags %}
 
-   {% load static %}
-   
+{% load filters %}
+
+
+
    {% block main %}
     <div class="blog" id='backy'>
 
@@ -52,7 +56,7 @@
 
               <div class="caption">
                 <h1 class="h3">{{post.title}}</h1>
-                <label> {{post.create_at|timesince}}</label>
+                <label> {{post.create_at|to_jalali:'%y/%m/%d _ %H:%M:%S'|convertor}}</label>
                 <hr class="offset-sm">
 
                 <p>
