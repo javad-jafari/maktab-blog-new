@@ -63,8 +63,9 @@
                 {{post.content|safe|striptags|truncatewords:15}}
                 </p>
                 <hr class="offset-sm">
-
-                <a href="{% url 'post_single' post.slug %}"> مشاهده  <i class="ion-ios-arrow-right"></i> </a>
+                <button id='index_but'>
+                <a href="{% url 'post_single' post.slug %}" style='color:white'> مشاهده  <i class="ion-ios-arrow-right"></i> </a>
+                </button>
               </div>
             </div>
           </div>

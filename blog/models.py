@@ -123,7 +123,7 @@ class Comment(models.Model):
 
 class RequestAuthor(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, verbose_name=_(
-        "Author_req"), on_delete=models.CASCADE)
-    
+        "Author_req"),related_query_name='req_author',related_name='req_author', on_delete=models.CASCADE)
+    confirm = models.BooleanField(_('confirm req_author'),default=False)
     def __str__(self):
         return self.user.email

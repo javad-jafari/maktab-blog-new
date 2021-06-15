@@ -118,6 +118,9 @@
                 {% if request.resolver_match.url_name == "admin_comments"%}active{%endif%}">
                   <i class="fa fa-comments"></i>
                   <p>نظرات</p>
+                  {% if not_confirmed_comment %}
+                <span class="badge badge-danger">{{not_confirmed_comment.count}}</span>
+                  {% endif %}
                 </a>
               </li>
 
@@ -127,6 +130,9 @@
                 {% if request.resolver_match.url_name == "admin_all_req_to_author"%}active{%endif%}">
                   <i class="fa fa-newspaper"></i>
                   <p>درخواست نویسندگی</p>
+                  {% if req_author %}
+                <span class="badge badge-danger">{{req_author.count}}</span>
+                  {% endif %}
                 </a>
               </li>
 

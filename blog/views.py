@@ -1,5 +1,6 @@
 # from django.db.models.query_utils import Q
 from django.conf import settings
+from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.db.models.fields import related
 from blog.models import Post
@@ -143,51 +144,51 @@ def search_view(request):
 
 @login_required(login_url='/accounts/login')
 def newpost(request):
-    post_form = NewPostForm(initial={'author':request.user})
-         
+    if request.user.is_author or request.user.is_superuser:
 
-    if request.method == 'POST':
-        post_form = NewPostForm(request.POST,request.FILES ,initial={'author':request.user})
+        post_form = NewPostForm(initial={'author':request.user})
+            
 
-        if post_form.is_valid():
-          
-            new_post= post_form.save(commit=False)
-            new_post.author = request.user
-            new_post.save()
-            PostSetting.objects.create(post_id=new_post.id,comment=True ,author=True ,allow_discussion=True)
-            messages.success(request, _('ok you create it !'))
-        else:
-            messages.warning(request, _('something get wrong'))
+        if request.method == 'POST':
+            post_form = NewPostForm(request.POST,request.FILES ,initial={'author':request.user})
+
+            if post_form.is_valid():
+            
+                new_post= post_form.save(commit=False)
+                new_post.author = request.user
+                new_post.save()
+                PostSetting.objects.create(post_id=new_post.id,comment=True ,author=True ,allow_discussion=True)
+                messages.success(request, _('ok you create it !'))
+            else:
+                messages.warning(request, _('something get wrong'))
 
 
-    return render(request, 'profiles/new_post_create.html', {
-        'post_form': post_form,
-        
-        
-    })
+        return render(request, 'profiles/new_post_create.html', {'post_form': post_form})
+    else:
+        raise PermissionDenied()
 
 @login_required(login_url='/accounts/login')
 def post_update(request,post_id):
     post = get_object_or_404(Post,id=post_id)
-    post_form = NewPostForm(instance=post)
-         
 
-    if request.method == 'POST':
-        post_form = NewPostForm(request.POST,request.FILES ,instance=post)
+    if post.author.id == request.user.id or request.user.is_superuser:
+        post_form = NewPostForm(instance=post)
+            
 
-        if post_form.is_valid():
+        if request.method == 'POST':
+            post_form = NewPostForm(request.POST,request.FILES ,instance=post)
 
-            post_form.save()
-            messages.success(request, _('ok you update it !'))
-        else:
-            messages.warning(request, _('something get wrong'))
+            if post_form.is_valid():
+
+                post_form.save()
+                messages.success(request, _('ok you update it !'))
+            else:
+                messages.warning(request, _('something get wrong'))
 
 
-    return render(request, 'profiles/new_post_create.html', {
-        'post_form': post_form,
-        
-        
-    })
+        return render(request, 'profiles/new_post_create.html', {'post_form': post_form})
+    else :
+        raise PermissionDenied()
 
 
 

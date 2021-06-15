@@ -1,7 +1,7 @@
 {% load static %}
 {% load mptt_tags %}
 {% load tz %}
-
+{% load filters %}
 <!DOCTYPE html>
 <html lang="en" >
   <head>
@@ -51,7 +51,7 @@
       <a href="{% url 'logout' %}" > <i class="ion-close"></i> خروج</a>
       <p style='text-align: left;color:white'> <i class="ion-time"></i>
       {% timezone "Asia/Tehran" %}
-          Tehran time: {{ time }}
+          Tehran time: {{ time|convertor }}
       {% endtimezone %}
       </p>
       

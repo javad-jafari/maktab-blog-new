@@ -279,7 +279,7 @@ def admin_user_get_ban(request,user_id):
 @login_required(login_url='/accounts/login/') 
 def admin_all_comments(request):
     if request.user.is_superuser:
-        all_comment=Comment.objects.all()
+        all_comment=Comment.objects.filter(is_confirmed=False)
         paginator = Paginator(all_comment, 2) 
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
@@ -410,7 +410,7 @@ def admin_all_req_to_author(request):
 
     user = request.user.id
     if request.user.is_superuser:
-        users = RequestAuthor.objects.all()
+        users = RequestAuthor.objects.filter(confirm=False)
 
     else:
         raise PermissionDenied()
@@ -433,9 +433,13 @@ def admin_confirm_to_author(request,user_id):
     
     if request.user.is_superuser:
         user = get_object_or_404(User,id=user_id)
-        if user:
+        req = get_object_or_404(RequestAuthor,user=user)
+
+        if user and req:
             user.is_author = True
             user.save()
+            req.confirm = True
+            req.save()
             messages.success(request, 'selected user was successfully get author!')
 
             return redirect('/accounts/siteadmin/requested_to_get_author')

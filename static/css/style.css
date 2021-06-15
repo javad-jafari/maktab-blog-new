@@ -1,5 +1,14 @@
 
+#index_but{
+    background-color: #38ac8c;
+    border: none;
+    padding:10px;
+    border-radius: 4px;
+}
 
+#index_but:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+  }
 
 #backy{
     background-color: #ffffff;
@@ -174,17 +183,19 @@
 }
 
       
-    .boton{
-        display: block;
-        width:44px;
-        height:34px;
-        line-height:16px;
-    }
+.boton{
+    display: block;
+    width:44px;
+    height:34px;
+    line-height:16px;
+}
 
-    .dropdown-submenu>.dropdown-menu {
-        top: 0;
-        right: 100%;
-    }
+.dropdown-submenu>.dropdown-menu {
+    top: 0;
+    right: 100%;
+}
+
+
 
 
 
