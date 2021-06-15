@@ -9,10 +9,11 @@
 {% endblock %}
 
 {% block body %}
-<div class="container text-center bg-light col-6 rounded p-3 mb-2">
+<div id='backy'>
+<div class="container text-center bg-dark col-6 rounded p-3 mb-5 mt-5 text-white">
     <h1 class="">فرم ثبت نام</h1>
 </div>
-    <div class="container rounded d-flex justify-content-center bg-light col-6 p-5 mb-5" dir="rtl">
+    <div class="container rounded d-flex justify-content-center bg-dark col-6 p-5 mb-5 text-white" dir="rtl">
         <div class="row">
             <div class="col-12">
                 <form method="post" action="{% url 'register' %}">
@@ -23,5 +24,5 @@
             </div>
         </div>
     </div>
-
+</div>
 {% endblock %}
