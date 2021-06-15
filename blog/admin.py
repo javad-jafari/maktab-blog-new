@@ -9,7 +9,7 @@ from mptt.admin import DraggableMPTTAdmin
 
 
 from jalali_date import datetime2jalali, date2jalali
-
+from jalali_date.admin import ModelAdminJalaliMixin, StackedInlineJalaliMixin, TabularInlineJalaliMixin
 
 
 
@@ -94,7 +94,7 @@ class PostSettingInline(admin.TabularInline):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'create_at', 'update_at',
+    list_display = ('title','get_created_jalali', 'create_at', 'update_at',
                     'publish_time', 'draft','promote', 'category', 'author','seen')
     search_fields = ('title',)
     list_filter = ('draft', 'category', 'author')
@@ -102,17 +102,23 @@ class PostAdmin(admin.ModelAdmin):
     list_editable = ('draft',)
     inlines = (PostSettingInline,)
 
+
+
     def make_published(self, request, queryset):
         queryset.update(draft=False)
 
     make_published.short_description = "Exit selected post from draft"
-
-    # def allow_discoution(self, request, queryset):
-    #     queryset.update(post_setting__allow_discusstion=True)
-    # allow_discoution.short_description = "allow user write comment on posts"
-
     actions = [make_published]
 
+
+    def get_created_jalali(self, obj):
+        return datetime2jalali(obj.publish_time).strftime('%y/%m/%d _ %H:%M:%S')
+    get_created_jalali.short_description = 'تاریخ ایجاد'
+    get_created_jalali.admin_order_field = 'created'
+
+
+
+    
 
 
 
