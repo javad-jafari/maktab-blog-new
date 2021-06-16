@@ -3,23 +3,23 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link href='http://www.fontonline.ir/css/BYekan.css' rel='stylesheet' type='text/css'>
 
     {% block css %}
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
     
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    
     {% endblock %}
+
+    {% block header %}{% endblock %}
+
     <title>{% block title %}NoNevis{% endblock %}</title>
 </head>
 <style>
 
 </style>
 <body>
-{% block header %}
-    <link href='http://www.fontonline.ir/css/BYekan.css' rel='stylesheet' type='text/css'>
-{% endblock %}
 {% block body %}
 
 {% endblock %}
