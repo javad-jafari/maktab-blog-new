@@ -4,7 +4,7 @@
 
 
 {% block body %}
-    <div id='backy_reg' class=' p-5'>
+    <div id='backy_reg' class='col-12 p-5'>
 
     <div class='container d-flex justify-content-center text-light'>
 
@@ -36,7 +36,6 @@
             <form method="post">
 
                 {% csrf_token %}
-
 
                 <p>{{ form.username|as_crispy_field  }}</p>
 
