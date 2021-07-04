@@ -2,7 +2,7 @@ from account.views import get_author_req
 from django.urls import path, re_path
 from .views import (LogoutView, RegisterView,SignView, admin_add_category, admin_all_req_to_author,
 					admin_comment_confirm, admin_comment_del, admin_confirm_to_author, admin_user_del,
-					admin_user_get_author, admin_user_get_ban,
+					admin_user_get_author, admin_user_get_ban, author_all_comments,
 					userprofile,change_password,
 					ProfileUpdate,admin_all_users,admin_all_categories,
 					admin_all_comments,delete_post,draft_post,publish_post,
@@ -21,10 +21,12 @@ urlpatterns = [
 	path('reset/done/', PasswordResetDone.as_view(), name='password_reset_done'),
 	path('confirm/<uidb64>/<token>/', PasswordResetConfirm.as_view(), name='password_reset_confirm'),
 	path('confirm/done/', PasswordResetComplete.as_view(), name='password_reset_complete'),
+	
 	path('profile/',userprofile , name='profile'),
 	path('profile/posts/delete/<int:post_id>',delete_post , name='delete_post'),
 	path('profile/posts/draft/<int:post_id>',draft_post , name='draft_post'),
 	path('profile/posts/publish/<int:post_id>',publish_post , name='publish_post'),
+	path('profile/author/comments',author_all_comments , name='author_all_comments'),
 
 	path('password/', change_password, name='change_password'),
 	path('profile/update/<uuid:pk>/',ProfileUpdate.as_view() , name='profile_update'),

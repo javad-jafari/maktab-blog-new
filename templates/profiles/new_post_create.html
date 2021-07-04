@@ -45,6 +45,8 @@
 
 
     <div class="form-group mb-0">
+    {{post_form.media}}
+
     {{ post_form.content|as_crispy_field }}
     </div>
 
@@ -74,8 +76,8 @@
   </div>
 {% endblock %}
 
-{% block javascript %}
+{% comment %} {% block javascript %}
 <script src="{% static 'admin/js/django_jalali.min.js' %}"></script>
 <script type="text/javascript" src="{% static "ckeditor/ckeditor-init.js" %}"></script>
 <script type="text/javascript" src="{% static "ckeditor/ckeditor/ckeditor.js" %}"></script>
-{% endblock %}
+{% endblock %} {% endcomment %}

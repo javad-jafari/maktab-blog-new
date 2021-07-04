@@ -19,7 +19,8 @@ from blog.models import Category, Post ,Comment, RequestAuthor
 from django.core.paginator import Paginator
 from django.core.exceptions import PermissionDenied
 from django.utils.translation import ugettext_lazy as _
-
+from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
 
 User = get_user_model()
 
@@ -53,6 +54,15 @@ class RegisterView(View):
             user.save()
             user = authenticate(request, username=form.cleaned_data['email'], password=form.cleaned_data['password'])
             login(request, user)
+
+
+            # subject, from_email, to = 'hello', 'sender', 'reciver'
+            # text_content = 'This is an important message.'
+            # html_content = '<p>hello {} <strong>importan</strong> welcome to <a href="#">our site</a>.</p>'.format(form.cleaned_data['email'])
+            # msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+            # msg.attach_alternative(html_content, "text/html")
+            # msg.send()
+
             return redirect('profile')
 
         return render(request, 'registration/register.html', {'form': form})
@@ -106,6 +116,23 @@ def userprofile(request):
         'get_author':get_author,
     }
     return render(request, 'profiles/home.html', context)
+
+
+@login_required(login_url='/accounts/login/') 
+def author_all_comments(request):
+
+    if request.user.is_superuser or request.user:
+        all_comment = Comment.objects.filter(post__author =request.user)
+        paginator = Paginator(all_comment, 2) 
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        context ={
+        'comments': page_obj}
+        return render(request, 'admin/all_comments.html', context)
+    else:
+        raise PermissionDenied()
+
+
 
 
 
